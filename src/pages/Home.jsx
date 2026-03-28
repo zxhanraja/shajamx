@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import { initHome, cleanupHome } from '../utils/homeAnimations.js';
 import SEO from '../components/SEO.jsx';
@@ -254,43 +255,63 @@ export default function Home() {
         <div className="work-container">
           <div className="work-track">
             <div className="work-card">
-              <div className="work-img" style={{ background: 'linear-gradient(135deg, var(--accent), var(--surface))' }}></div>
+              <div className="work-img">
+                <img src="https://ik.imagekit.io/ioktbcewp/enhanced_image.png?tr=w-1000,q-80,f-auto" alt="SHAJAMX" />
+              </div>
+              <div className="work-info">
+                <h3 className="work-title">SHAJAMX</h3>
+                <div className="work-tags">REACT · 3D · GSAP</div>
+                <Link to="/work" className="work-arrow">↗</Link>
+              </div>
+            </div>
+            <div className="work-card">
+              <div className="work-img">
+                <img src="https://ik.imagekit.io/ioktbcewp/AURA%20X%20spatial%20computing%20interface%20concept.png?tr=w-1000,q-80,f-auto" alt="AURA X" />
+              </div>
               <div className="work-info">
                 <h3 className="work-title">AURA X</h3>
                 <div className="work-tags">UI/UX · MOTION · WEBGL</div>
-                <div className="work-arrow">↗</div>
+                <Link to="/work" className="work-arrow">↗</Link>
               </div>
             </div>
             <div className="work-card">
-              <div className="work-img" style={{ background: 'linear-gradient(135deg, var(--accent2), var(--surface))' }}></div>
+              <div className="work-img">
+                <img src="https://ik.imagekit.io/ioktbcewp/ChatGPT%20Image%20Mar%2028,%202026,%2009_39_53%20PM.png?tr=w-1000,q-80,f-auto" alt="NEURAL KINETICS" />
+              </div>
               <div className="work-info">
                 <h3 className="work-title">NEURAL KINETICS</h3>
                 <div className="work-tags">BRANDING · DIGITAL EXPERIENCE</div>
-                <div className="work-arrow">↗</div>
+                <Link to="/work" className="work-arrow">↗</Link>
               </div>
             </div>
             <div className="work-card">
-              <div className="work-img" style={{ background: 'linear-gradient(135deg, var(--accent3), var(--surface))' }}></div>
+              <div className="work-img">
+                <img src="https://ik.imagekit.io/ioktbcewp/ChatGPT%20Image%20Mar%2028,%202026,%2009_54_54%20PM.png?tr=w-1000,q-80,f-auto" alt="LUMINA" />
+              </div>
               <div className="work-info">
                 <h3 className="work-title">LUMINA</h3>
                 <div className="work-tags">E-COMMERCE · UI/UX</div>
-                <div className="work-arrow">↗</div>
+                <Link to="/work" className="work-arrow">↗</Link>
               </div>
             </div>
             <div className="work-card">
-              <div className="work-img" style={{ background: 'linear-gradient(135deg, var(--muted), var(--bg))' }}></div>
+              <div className="work-img">
+                <img src="https://ik.imagekit.io/ioktbcewp/Nexus%20core%20in%20binary%20hands.png?tr=w-1000,q-80,f-auto" alt="NEXUS CORE" />
+              </div>
               <div className="work-info">
                 <h3 className="work-title">NEXUS CORE</h3>
                 <div className="work-tags">SaaS · PLATFORM</div>
-                <div className="work-arrow">↗</div>
+                <Link to="/work" className="work-arrow">↗</Link>
               </div>
             </div>
             <div className="work-card">
-              <div className="work-img" style={{ background: 'linear-gradient(135deg, var(--accent), var(--accent2))' }}></div>
+              <div className="work-img">
+                <img src="https://ik.imagekit.io/ioktbcewp/ChatGPT%20Image%20Mar%2028,%202026,%2009_45_35%20PM.png?tr=w-1000,q-80,f-auto" alt="SYNESTHESIA" />
+              </div>
               <div className="work-info">
                 <h3 className="work-title">SYNESTHESIA</h3>
                 <div className="work-tags">INTERACTION · ANIMATION</div>
-                <div className="work-arrow">↗</div>
+                <Link to="/work" className="work-arrow">↗</Link>
               </div>
             </div>
           </div>

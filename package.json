@@ -11,7 +11,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "dependencies": {
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.5.0",
@@ -23,5 +23,8 @@
     "react-helmet-async": "^3.0.0",
     "react-router-dom": "^7.13.2",
     "three": "^0.183.2"
+  },
+  "devDependencies": {
+    "vite": "^6.0.2"
   }
 }

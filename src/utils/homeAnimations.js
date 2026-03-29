@@ -1,7 +1,25 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { TextPlugin } from 'gsap/TextPlugin';
-import * as THREE from 'three';
+import { 
+  Scene, 
+  PerspectiveCamera, 
+  WebGLRenderer, 
+  BufferGeometry, 
+  BufferAttribute, 
+  PointsMaterial, 
+  Points, 
+  IcosahedronGeometry, 
+  MeshBasicMaterial, 
+  Mesh, 
+  Raycaster, 
+  Vector2, 
+  Plane, 
+  Vector3, 
+  AdditiveBlending,
+  SphereGeometry,
+  TorusKnotGeometry
+} from 'three';
 import Lenis from '@studio-freight/lenis';
 
 let heroRafId, aboutRafId, testimonialsRafId, whyUsRafId, servicesRafId;
@@ -167,15 +185,15 @@ export function initHome() {
   // --- HERO THREE.JS PARTICLES ---
   const heroCanvas = document.getElementById("hero-canvas");
   if (heroCanvas) {
-    const heroScene = new THREE.Scene();
-    const heroCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const heroRenderer = new THREE.WebGLRenderer({ canvas: heroCanvas, alpha: true, antialias: true });
+    const heroScene = new Scene();
+    const heroCamera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const heroRenderer = new WebGLRenderer({ canvas: heroCanvas, alpha: true, antialias: true });
 
     heroRenderer.setSize(window.innerWidth, window.innerHeight);
     heroRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
     const particleCount = isMobile ? 600 : 3000;
-    const particlesGeo = new THREE.BufferGeometry();
+    const particlesGeo = new BufferGeometry();
     const particlesPos = new Float32Array(particleCount * 3);
     const particlesBasePos = new Float32Array(particleCount * 3);
 
@@ -185,26 +203,26 @@ export function initHome() {
       particlesBasePos[i] = val;
     }
 
-    particlesGeo.setAttribute("position", new THREE.BufferAttribute(particlesPos, 3));
-    particlesGeo.setAttribute("basePosition", new THREE.BufferAttribute(particlesBasePos, 3));
+    particlesGeo.setAttribute("position", new BufferAttribute(particlesPos, 3));
+    particlesGeo.setAttribute("basePosition", new BufferAttribute(particlesBasePos, 3));
 
-    const particleMat = new THREE.PointsMaterial({
+    const particleMat = new PointsMaterial({
       size: 0.02,
       color: 0x00e5ff,
       transparent: true,
       opacity: 0.6,
-      blending: THREE.AdditiveBlending
+      blending: AdditiveBlending
     });
 
-    const particleMesh = new THREE.Points(particlesGeo, particleMat);
+    const particleMesh = new Points(particlesGeo, particleMat);
     heroScene.add(particleMesh);
 
     const icos = [];
-    const icoGeo = new THREE.IcosahedronGeometry(Math.random() * 0.5 + 0.5, 0);
-    const icoMat = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true, transparent: true, opacity: 0.1 });
+    const icoGeo = new IcosahedronGeometry(Math.random() * 0.5 + 0.5, 0);
+    const icoMat = new MeshBasicMaterial({ color: 0xffffff, wireframe: true, transparent: true, opacity: 0.1 });
 
     for(let i=0; i<4; i++) {
-      const ico = new THREE.Mesh(icoGeo, icoMat);
+      const ico = new Mesh(icoGeo, icoMat);
       ico.position.set((Math.random() - 0.5) * 10, (Math.random() - 0.5) * 10, (Math.random() - 0.5) * 5);
       ico.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, 0);
       ico.userData = { rx: (Math.random() - 0.5) * 0.01, ry: (Math.random() - 0.5) * 0.01 };
@@ -214,8 +232,8 @@ export function initHome() {
 
     heroCamera.position.z = 5;
 
-    const raycaster = new THREE.Raycaster();
-    const mouse = new THREE.Vector2();
+    const raycaster = new Raycaster();
+    const mouse = new Vector2();
 
     const onMouse = (event) => {
       mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -224,7 +242,7 @@ export function initHome() {
     window.addEventListener("mousemove", onMouse);
     if(window._homeScrubbers) window._homeScrubbers.push(() => window.removeEventListener("mousemove", onMouse));
 
-    const clock = new THREE.Clock();
+    const startTime = performance.now();
     let heroFrameCount = 0;
     let isHeroVisible = true;
     observeCanvas(heroCanvas, (v) => isHeroVisible = v);
@@ -235,7 +253,7 @@ export function initHome() {
       heroFrameCount++;
       if (isMobile && heroFrameCount % 2 === 0) return;
       
-      const time = clock.getElapsedTime();
+      const time = (performance.now() - startTime) * 0.001;
       particleMesh.rotation.y = time * 0.05;
       particleMesh.rotation.x = time * 0.02;
 
@@ -245,8 +263,8 @@ export function initHome() {
       });
 
       raycaster.setFromCamera(mouse, heroCamera);
-      const intersectPlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
-      const intersectPoint = new THREE.Vector3();
+      const intersectPlane = new Plane(new Vector3(0, 0, 1), 0);
+      const intersectPoint = new Vector3();
       raycaster.ray.intersectPlane(intersectPlane, intersectPoint);
 
       const positions = particleMesh.geometry.attributes.position.array;
@@ -388,9 +406,9 @@ export function initHome() {
   // --- ABOUT SECTION ---
   const aboutCanvas = document.getElementById("about-canvas");
   if (aboutCanvas) {
-    const aboutScene = new THREE.Scene();
-    const aboutCamera = new THREE.PerspectiveCamera(75, 1, 0.1, 100);
-    const aboutRenderer = new THREE.WebGLRenderer({ canvas: aboutCanvas, alpha: true, antialias: true });
+    const aboutScene = new Scene();
+    const aboutCamera = new PerspectiveCamera(75, 1, 0.1, 100);
+    const aboutRenderer = new WebGLRenderer({ canvas: aboutCanvas, alpha: true, antialias: true });
     aboutRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
 
     const aboutLeft = document.querySelector(".about-left");
@@ -405,12 +423,12 @@ export function initHome() {
     if(window._homeScrubbers) window._homeScrubbers.push(() => window.removeEventListener("resize", resizeAbout));
     resizeAbout();
 
-    let geoSphere = new THREE.SphereGeometry(2, 32, 32);
-    let geoTorus = new THREE.TorusKnotGeometry(1.5, 0.4, 100, 16);
-    const matWire = new THREE.MeshBasicMaterial({ color: 0xc8ff00, wireframe: true, transparent: true, opacity: 0 });
+    let geoSphere = new SphereGeometry(2, 32, 32);
+    let geoTorus = new TorusKnotGeometry(1.5, 0.4, 100, 16);
+    const matWire = new MeshBasicMaterial({ color: 0xc8ff00, wireframe: true, transparent: true, opacity: 0 });
 
-    const meshSphere = new THREE.Mesh(geoSphere, matWire.clone());
-    const meshTorus = new THREE.Mesh(geoTorus, matWire.clone());
+    const meshSphere = new Mesh(geoSphere, matWire.clone());
+    const meshTorus = new Mesh(geoTorus, matWire.clone());
     meshSphere.material.opacity = 1;
     meshTorus.material.opacity = 0;
 
@@ -458,16 +476,16 @@ export function initHome() {
   // --- TESTIMONIALS ---
   const testimonialsCanvas = document.getElementById("testimonials-canvas");
   if (testimonialsCanvas) {
-    const tScene = new THREE.Scene();
-    const tCamera = new THREE.PerspectiveCamera(75, window.innerWidth / 500, 0.1, 1000);
-    const tRenderer = new THREE.WebGLRenderer({ canvas: testimonialsCanvas, alpha: true, antialias: true });
+    const tScene = new Scene();
+    const tCamera = new PerspectiveCamera(75, window.innerWidth / 500, 0.1, 1000);
+    const tRenderer = new WebGLRenderer({ canvas: testimonialsCanvas, alpha: true, antialias: true });
     tRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
     tRenderer.setSize(window.innerWidth, 500);
     tCamera.position.z = 10;
 
-    const geo = new THREE.SphereGeometry(12, 40, 40);
-    const mat = new THREE.PointsMaterial({ color: 0x00e5ff, size: 0.08, transparent: true, opacity: 0.4 });
-    const points = new THREE.Points(geo, mat);
+    const geo = new SphereGeometry(12, 40, 40);
+    const mat = new PointsMaterial({ color: 0x00e5ff, size: 0.08, transparent: true, opacity: 0.4 });
+    const points = new Points(geo, mat);
     tScene.add(points);
 
     let isTestimonialsVisible = false;
@@ -566,17 +584,17 @@ export function initHome() {
   // --- WHY US ---
   const whyUsCanvas = document.getElementById("why-us-canvas");
   if (whyUsCanvas) {
-    const whyUsScene = new THREE.Scene();
-    const whyUsCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const whyUsRenderer = new THREE.WebGLRenderer({ canvas: whyUsCanvas, alpha: true, antialias: true });
+    const whyUsScene = new Scene();
+    const whyUsCamera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const whyUsRenderer = new WebGLRenderer({ canvas: whyUsCanvas, alpha: true, antialias: true });
     whyUsRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
 
     whyUsRenderer.setSize(window.innerWidth, window.innerHeight);
     whyUsCamera.position.z = 8;
 
-    const tornadoGeo = new THREE.TorusKnotGeometry(10, 3, 64, 8);
-    const tornadoMat = new THREE.MeshBasicMaterial({ color: 0xff3cac, wireframe: true, transparent: true, opacity: 0.05 });
-    const tornado = new THREE.Mesh(tornadoGeo, tornadoMat);
+    const tornadoGeo = new TorusKnotGeometry(10, 3, 64, 8);
+    const tornadoMat = new MeshBasicMaterial({ color: 0xff3cac, wireframe: true, transparent: true, opacity: 0.05 });
+    const tornado = new Mesh(tornadoGeo, tornadoMat);
     whyUsScene.add(tornado);
 
     let isWhyUsVisible = false;
@@ -614,14 +632,14 @@ export function initHome() {
   // --- SERVICES THREE.JS ---
   const servicesCanvas = document.getElementById("services-canvas");
   if (servicesCanvas) {
-    const sScene = new THREE.Scene();
-    const sCamera = new THREE.PerspectiveCamera(75, window.innerWidth / 400, 0.1, 1000);
-    const sRenderer = new THREE.WebGLRenderer({ canvas: servicesCanvas, alpha: true, antialias: true });
+    const sScene = new Scene();
+    const sCamera = new PerspectiveCamera(75, window.innerWidth / 400, 0.1, 1000);
+    const sRenderer = new WebGLRenderer({ canvas: servicesCanvas, alpha: true, antialias: true });
     sRenderer.setSize(window.innerWidth, 400); sCamera.position.z = 5;
 
-    const geo = new THREE.TorusKnotGeometry(10, 3, 100, 16);
-    const mat = new THREE.MeshBasicMaterial({ color: 0x00e5ff, wireframe: true, transparent: true, opacity: 0.1 });
-    const knot = new THREE.Mesh(geo, mat);
+    const geo = new TorusKnotGeometry(10, 3, 100, 16);
+    const mat = new MeshBasicMaterial({ color: 0x00e5ff, wireframe: true, transparent: true, opacity: 0.1 });
+    const knot = new Mesh(geo, mat);
     knot.scale.set(0.15, 0.15, 0.15);
     sScene.add(knot);
 

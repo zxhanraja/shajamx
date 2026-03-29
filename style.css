@@ -12,7 +12,7 @@ canvas { max-width: 100%; display: block; }
   --accent2:    #ff3cac;      /* hot magenta */
   --accent3:    #00e5ff;      /* electric cyan */
   --text:       #f0f0f0;      /* primary text */
-  --muted:      #9494b8;      /* secondary text - updated for 4.5:1 contrast */
+  --muted:      #b3b3d1;      /* increased contrast for AA compliance */
   --border:     #1e1e2e;      /* subtle borders */
 
   /* Typography Scale */
@@ -20,7 +20,7 @@ canvas { max-width: 100%; display: block; }
   --fs-h2:      clamp(24px, 5vw, 80px);
   --fs-h3:      clamp(16px, 3.5vw, 40px);
   --fs-body:    clamp(14px, 1.8vw, 18px);
-  --fs-mono:    clamp(10px, 1.1vw, 14px);
+  --fs-mono:    clamp(12px, 1.1vw, 15px);
 
   --font-display: 'Syne', sans-serif;
   --font-mono: 'Space Mono', monospace;

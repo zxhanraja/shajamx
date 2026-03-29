@@ -331,9 +331,10 @@ body::after {
 .hero-content {
   position: relative;
   z-index: 10;
-  width: 90%;
+  width: 100%;
   max-width: 1400px;
-  /* mix-blend-mode: difference; */ /* Removed to ensure visibility on all bg states */
+  padding: 0 5%;
+  margin: 0 auto;
 }
 .hero-mono-text {
   font-family: var(--font-mono);
@@ -341,6 +342,7 @@ body::after {
   color: var(--text);
   margin-bottom: 2rem;
   letter-spacing: 0.1em;
+  white-space: nowrap;
 }
 .hero-headline {
   font-size: var(--fs-hero);
@@ -1012,9 +1014,9 @@ body::after {
   }
   .nav-logo { 
     font-size: 1.2rem; 
-    width: 100%; 
-    text-align: center; 
-    margin-bottom: 0.8rem; 
+    width: auto; 
+    text-align: left; 
+    margin-bottom: 0; 
   }
   .hamburger-menu {
     display: flex !important;

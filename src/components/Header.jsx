@@ -64,7 +64,7 @@ export default function Header() {
 
   return (
     <header id="header">
-      <NavLink to="/" className="nav-logo" style={{ textDecoration: 'none' }}>SHAJAMX</NavLink>
+      <NavLink to="/" className="nav-logo">SHAJAMX</NavLink>
       <nav className="nav-links" aria-label="Main Navigation">
         <NavLink to="/services">Services</NavLink>
         <NavLink to="/why-us">Why Us</NavLink>

@@ -1,26 +1,13 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { TextPlugin } from 'gsap/TextPlugin';
-import { 
-  Scene, 
-  PerspectiveCamera, 
-  WebGLRenderer, 
-  BufferGeometry, 
-  BufferAttribute, 
-  PointsMaterial, 
-  Points, 
-  IcosahedronGeometry, 
-  MeshBasicMaterial, 
-  Mesh, 
-  Raycaster, 
-  Vector2, 
-  Plane, 
-  Vector3, 
-  AdditiveBlending,
-  SphereGeometry,
-  TorusKnotGeometry
-} from 'three';
 import Lenis from '@studio-freight/lenis';
+
+// Dynamic import Three.js components only when needed
+const getThree = async () => {
+  const THREE = await import('three');
+  return THREE;
+};
 
 let heroRafId, aboutRafId, testimonialsRafId, whyUsRafId, servicesRafId;
 let isHomeActive = false;
@@ -160,8 +147,9 @@ export function initHome() {
 
     const heroContent = document.querySelector(".hero-content");
     const onHeroMove = (e) => {
-      const x = (e.clientX / window.innerWidth - 0.5) * 40;
-      const y = (e.clientY / window.innerHeight - 0.5) * 40;
+      if (isMobile) return;
+      const x = (e.clientX / window.innerWidth - 0.5) * 20;
+      const y = (e.clientY / window.innerHeight - 0.5) * 20;
       gsap.to(heroContent, {
         x: -x,
         y: -y,

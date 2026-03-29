@@ -271,7 +271,14 @@ export default function Home() {
           <div className="work-track">
             <div className="work-card">
               <div className="work-img">
-                <img src="https://ik.imagekit.io/ioktbcewp/enhanced_image.png?tr=w-1000,q-80,f-auto" alt="ShajamX - Premium Web Agency Portfolio Item" />
+                <img 
+                  src="https://ik.imagekit.io/ioktbcewp/enhanced_image.png?tr=w-1000,q-80,f-auto" 
+                  srcSet="https://ik.imagekit.io/ioktbcewp/enhanced_image.png?tr=w-400,q-70,f-auto 400w, https://ik.imagekit.io/ioktbcewp/enhanced_image.png?tr=w-800,q-80,f-auto 800w, https://ik.imagekit.io/ioktbcewp/enhanced_image.png?tr=w-1200,q-80,f-auto 1200w"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  alt="ShajamX - Premium Web Agency Portfolio Item" 
+                  loading="lazy"
+                  decoding="async"
+                />
               </div>
               <div className="work-info">
                 <h3 className="work-title">SHAJAMX</h3>
@@ -281,7 +288,13 @@ export default function Home() {
             </div>
             <div className="work-card">
               <div className="work-img">
-                <img src="https://ik.imagekit.io/ioktbcewp/AURA%20X%20spatial%20computing%20interface%20concept.png?tr=w-1000,q-80,f-auto" alt="Aura X - 3D Interface Design" />
+                <img 
+                  src="https://ik.imagekit.io/ioktbcewp/AURA%20X%20spatial%20computing%20interface%20concept.png?tr=w-1000,q-80,f-auto" 
+                  srcSet="https://ik.imagekit.io/ioktbcewp/AURA%20X%20spatial%20computing%20interface%20concept.png?tr=w-400,q-70,f-auto 400w, https://ik.imagekit.io/ioktbcewp/AURA%20X%20spatial%20computing%20interface%20concept.png?tr=w-800,q-80,f-auto 800w, https://ik.imagekit.io/ioktbcewp/AURA%20X%20spatial%20computing%20interface%20concept.png?tr=w-1200,q-80,f-auto 1200w"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  alt="Aura X - 3D Interface Design" 
+                  loading="lazy"
+                />
               </div>
               <div className="work-info">
                 <h3 className="work-title">AURA X</h3>
@@ -291,7 +304,13 @@ export default function Home() {
             </div>
             <div className="work-card">
               <div className="work-img">
-                <img src="https://ik.imagekit.io/ioktbcewp/ChatGPT%20Image%20Mar%2028,%202026,%2009_39_53%20PM.png?tr=w-1000,q-80,f-auto" alt="Neural Kinetics - AI Branding Concept" />
+                <img 
+                  src="https://ik.imagekit.io/ioktbcewp/ChatGPT%20Image%20Mar%2028,%202026,%2009_39_53%20PM.png?tr=w-1000,q-80,f-auto" 
+                  srcSet="https://ik.imagekit.io/ioktbcewp/ChatGPT%20Image%20Mar%2028,%202026,%2009_39_53%20PM.png?tr=w-400,q-70,f-auto 400w, https://ik.imagekit.io/ioktbcewp/ChatGPT%20Image%20Mar%2028,%202026,%2009_39_53%20PM.png?tr=w-800,q-80,f-auto 800w, https://ik.imagekit.io/ioktbcewp/ChatGPT%20Image%20Mar%2028,%202026,%2009_39_53%20PM.png?tr=w-1200,q-80,f-auto 1200w"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  alt="Neural Kinetics - AI Branding Concept" 
+                  loading="lazy"
+                />
               </div>
               <div className="work-info">
                 <h3 className="work-title">NEURAL KINETICS</h3>
@@ -301,7 +320,13 @@ export default function Home() {
             </div>
             <div className="work-card">
               <div className="work-img">
-                <img src="https://ik.imagekit.io/ioktbcewp/ChatGPT%20Image%20Mar%2028,%202026,%2009_54_54%20PM.png?tr=w-1000,q-80,f-auto" alt="Lumina - Headless E-commerce Design" />
+                <img 
+                  src="https://ik.imagekit.io/ioktbcewp/ChatGPT%20Image%20Mar%2028,%202026,%2009_54_54%20PM.png?tr=w-1000,q-80,f-auto" 
+                  srcSet="https://ik.imagekit.io/ioktbcewp/ChatGPT%20Image%20Mar%2028,%202026,%2009_54_54%20PM.png?tr=w-400,q-70,f-auto 400w, https://ik.imagekit.io/ioktbcewp/ChatGPT%20Image%20Mar%2028,%202026,%2009_54_54%20PM.png?tr=w-800,q-80,f-auto 800w, https://ik.imagekit.io/ioktbcewp/ChatGPT%20Image%20Mar%2028,%202026,%2009_54_54%20PM.png?tr=w-1200,q-80,f-auto 1200w"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  alt="Lumina - Headless E-commerce Design" 
+                  loading="lazy"
+                />
               </div>
               <div className="work-info">
                 <h3 className="work-title">LUMINA</h3>
@@ -311,7 +336,13 @@ export default function Home() {
             </div>
             <div className="work-card">
               <div className="work-img">
-                <img src="https://ik.imagekit.io/ioktbcewp/Nexus%20core%20in%20binary%20hands.png?tr=w-1000,q-80,f-auto" alt="Nexus Core - SaaS Platform UI Design" />
+                <img 
+                  src="https://ik.imagekit.io/ioktbcewp/Nexus%20core%20in%20binary%20hands.png?tr=w-1000,q-80,f-auto" 
+                  srcSet="https://ik.imagekit.io/ioktbcewp/Nexus%20core%20in%20binary%20hands.png?tr=w-400,q-70,f-auto 400w, https://ik.imagekit.io/ioktbcewp/Nexus%20core%20in%20binary%20hands.png?tr=w-800,q-80,f-auto 800w, https://ik.imagekit.io/ioktbcewp/Nexus%20core%20in%20binary%20hands.png?tr=w-1200,q-80,f-auto 1200w"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  alt="Nexus Core - SaaS Platform UI Design" 
+                  loading="lazy"
+                />
               </div>
               <div className="work-info">
                 <h3 className="work-title">NEXUS CORE</h3>
@@ -321,7 +352,13 @@ export default function Home() {
             </div>
             <div className="work-card">
               <div className="work-img">
-                <img src="https://ik.imagekit.io/ioktbcewp/ChatGPT%20Image%20Mar%2028,%202026,%2009_45_35%20PM.png?tr=w-1000,q-80,f-auto" alt="Synesthesia - Interactive Audio Visualizer" />
+                <img 
+                  src="https://ik.imagekit.io/ioktbcewp/ChatGPT%20Image%20Mar%2028,%202026,%2009_45_35%20PM.png?tr=w-1000,q-80,f-auto" 
+                  srcSet="https://ik.imagekit.io/ioktbcewp/ChatGPT%20Image%20Mar%2028,%202026,%2009_45_35%20PM.png?tr=w-400,q-70,f-auto 400w, https://ik.imagekit.io/ioktbcewp/ChatGPT%20Image%20Mar%2028,%202026,%2009_45_35%20PM.png?tr=w-800,q-80,f-auto 800w, https://ik.imagekit.io/ioktbcewp/ChatGPT%20Image%20Mar%2028,%202026,%2009_45_35%20PM.png?tr=w-1200,q-80,f-auto 1200w"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  alt="Synesthesia - Interactive Audio Visualizer" 
+                  loading="lazy"
+                />
               </div>
               <div className="work-info">
                 <h3 className="work-title">SYNESTHESIA</h3>

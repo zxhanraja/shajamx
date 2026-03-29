@@ -1,14 +1,23 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { TransitionProvider } from './context/TransitionContext.jsx';
 import Header from './components/Header.jsx';
 import Footer from './components/Footer.jsx';
 import ContactModal from './components/ContactModal.jsx';
-import Home from './pages/Home.jsx';
-import About from './pages/About.jsx';
-import Services from './pages/Services.jsx';
-import Work from './pages/Work.jsx';
-import WhyUs from './pages/WhyUs.jsx';
+
+// Lazy load page components for better performance (splitting heavy Three.js/GSAP per page)
+const Home = lazy(() => import('./pages/Home.jsx'));
+const About = lazy(() => import('./pages/About.jsx'));
+const Services = lazy(() => import('./pages/Services.jsx'));
+const Work = lazy(() => import('./pages/Work.jsx'));
+const WhyUs = lazy(() => import('./pages/WhyUs.jsx'));
+
+// Minimal fallback loader
+const PageLoader = () => (
+  <div className="page-loader-mini">
+    <div className="loader-bar"></div>
+  </div>
+);
 
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -122,13 +131,15 @@ export default function App() {
         <ContactModal />
         
         <main id="spa-root">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/services" element={<Services />} />
-            <Route path="/work" element={<Work />} />
-            <Route path="/why-us" element={<WhyUs />} />
-          </Routes>
+          <Suspense fallback={<PageLoader />}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/services" element={<Services />} />
+              <Route path="/work" element={<Work />} />
+              <Route path="/why-us" element={<WhyUs />} />
+            </Routes>
+          </Suspense>
         </main>
 
         <Footer />

@@ -94,22 +94,22 @@ export default function Footer() {
           </p>
         </div>
         <div className="footer-right">
-          <div className="footer-nav-col">
+          <nav className="footer-nav-col" aria-label="Footer Pages">
             <div className="footer-nav-heading">Pages</div>
-            <a href="/" onClick={(e) => handleLinkClick(e, '/')} className="footer-link">Home</a>
-            <a href="/services" onClick={(e) => handleLinkClick(e, '/services')} className="footer-link">Services</a>
-            <a href="/work" onClick={(e) => handleLinkClick(e, '/work')} className="footer-link">Our Work</a>
-            <a href="/about" onClick={(e) => handleLinkClick(e, '/about')} className="footer-link">About Us</a>
-            <a href="/why-us" onClick={(e) => handleLinkClick(e, '/why-us')} className="footer-link">Why ShajamX</a>
-          </div>
-          <div className="footer-nav-col">
+            <a href="/" onClick={(e) => handleLinkClick(e, '/')} className="footer-link" aria-label="Go to Home">Home</a>
+            <a href="/services" onClick={(e) => handleLinkClick(e, '/services')} className="footer-link" aria-label="Go to Services">Services</a>
+            <a href="/work" onClick={(e) => handleLinkClick(e, '/work')} className="footer-link" aria-label="Go to Our Work">Our Work</a>
+            <a href="/about" onClick={(e) => handleLinkClick(e, '/about')} className="footer-link" aria-label="Go to About Us">About Us</a>
+            <a href="/why-us" onClick={(e) => handleLinkClick(e, '/why-us')} className="footer-link" aria-label="Go to Why ShajamX">Why ShajamX</a>
+          </nav>
+          <nav className="footer-nav-col" aria-label="Footer Services">
             <div className="footer-nav-heading">Services</div>
-            <a href="/services" onClick={(e) => handleLinkClick(e, '/services')} className="footer-link">Web Development</a>
-            <a href="/services" onClick={(e) => handleLinkClick(e, '/services')} className="footer-link">UI/UX Design</a>
-            <a href="/services" onClick={(e) => handleLinkClick(e, '/services')} className="footer-link">React Development</a>
-            <a href="/services" onClick={(e) => handleLinkClick(e, '/services')} className="footer-link">GSAP Animation</a>
-            <a href="/services" onClick={(e) => handleLinkClick(e, '/services')} className="footer-link">Three.js 3D Web</a>
-          </div>
+            <a href="/services" onClick={(e) => handleLinkClick(e, '/services')} className="footer-link" aria-label="Service: Web Development">Web Development</a>
+            <a href="/services" onClick={(e) => handleLinkClick(e, '/services')} className="footer-link" aria-label="Service: UI/UX Design">UI/UX Design</a>
+            <a href="/services" onClick={(e) => handleLinkClick(e, '/services')} className="footer-link" aria-label="Service: React Development">React Development</a>
+            <a href="/services" onClick={(e) => handleLinkClick(e, '/services')} className="footer-link" aria-label="Service: GSAP Animation">GSAP Animation</a>
+            <a href="/services" onClick={(e) => handleLinkClick(e, '/services')} className="footer-link" aria-label="Service: Three.js 3D Web">Three.js 3D Web</a>
+          </nav>
         </div>
       </div>
 

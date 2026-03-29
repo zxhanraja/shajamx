@@ -56,7 +56,7 @@ export default function Header() {
     };
 
     return (
-      <a href={to} onClick={handleClick} className={`nav-link ${isActive ? 'active' : ''} ${className}`}>
+      <a href={to} onClick={handleClick} className={`nav-link ${isActive ? 'active' : ''} ${className}`} aria-label={`Navigate to ${children}`}>
         {children}
       </a>
     );
@@ -65,7 +65,7 @@ export default function Header() {
   return (
     <header id="header">
       <NavLink to="/" className="nav-logo" style={{ textDecoration: 'none' }}>SHAJAMX</NavLink>
-      <nav className="nav-links">
+      <nav className="nav-links" aria-label="Main Navigation">
         <NavLink to="/services">Services</NavLink>
         <NavLink to="/why-us">Why Us</NavLink>
         <NavLink to="/work">Work</NavLink>
@@ -73,15 +73,21 @@ export default function Header() {
       </nav>
       <div className="header-right">
         <NavLink to="/#contact" className="nav-cta">Let's Talk</NavLink>
-        <div className="hamburger-menu" onClick={toggleMenu}>
+        <button 
+          className="hamburger-menu" 
+          onClick={toggleMenu}
+          aria-label={menuOpen ? "Close Menu" : "Open Menu"}
+          aria-expanded={menuOpen}
+          style={{ background: 'none', border: 'none', padding: 0 }}
+        >
           <span className="line-1"></span>
           <span className="line-2"></span>
           <span className="line-3"></span>
-        </div>
+        </button>
       </div>
       
-      <div className="mobile-menu-overlay">
-        <nav className="mobile-nav-links">
+      <div className="mobile-menu-overlay" aria-hidden={!menuOpen}>
+        <nav className="mobile-nav-links" aria-label="Mobile Navigation">
           <NavLink to="/">HOME</NavLink>
           <NavLink to="/services">SERVICES</NavLink>
           <NavLink to="/why-us">WHY US</NavLink>

@@ -12,7 +12,7 @@ canvas { max-width: 100%; display: block; }
   --accent2:    #ff3cac;      /* hot magenta */
   --accent3:    #00e5ff;      /* electric cyan */
   --text:       #f0f0f0;      /* primary text */
-  --muted:      #4a4a60;      /* secondary text */
+  --muted:      #9494b8;      /* secondary text - updated for 4.5:1 contrast */
   --border:     #1e1e2e;      /* subtle borders */
 
   /* Typography Scale */
@@ -56,7 +56,15 @@ body {
 a, button, input, textarea {
   font-family: inherit;
   cursor: none;
+  outline: none;
 }
+
+/* Accessible focus states for keyboard users */
+a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
 
 .cta-link-react {
   display: inline-flex;
@@ -167,6 +175,25 @@ body::after {
   width: 0%;
   height: 100%;
   background: var(--accent);
+}
+
+/* PAGE LOADER MINI (for dynamic imports) */
+.page-loader-mini {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 2px;
+  z-index: 99999;
+  background: rgba(200, 255, 0, 0.1);
+}
+.page-loader-mini .loader-bar {
+  height: 100%;
+  width: 50%;
+  background: var(--accent);
+  animation: mini-loader 1s infinite ease-in-out;
+}
+@keyframes mini-loader {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
 }
 
 /* PAGE TRANSITION OVERLAY */

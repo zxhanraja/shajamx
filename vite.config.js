@@ -9,13 +9,17 @@ export default defineConfig({
         manualChunks(id) {
           if (id.includes('node_modules')) {
             if (id.includes('three')) return 'three';
+            if (id.includes('@react-three')) return 'react-three';
             if (id.includes('gsap')) return 'gsap';
-            if (id.includes('react')) return 'react-vendor';
+            if (id.includes('react-router') || id.includes('react-dom') || id.includes('react-helmet')) return 'react-core';
             return 'vendor';
           }
         }
       }
     },
-    chunkSizeWarningLimit: 1000
+    chunkSizeWarningLimit: 1200,
+    assetsInlineLimit: 4096, // Inline small assets
+    minify: 'esbuild',
+    reportCompressedSize: true
   }
 });

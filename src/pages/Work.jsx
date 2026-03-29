@@ -1,41 +1,13 @@
 import React, { useRef, useLayoutEffect } from 'react';
-import { createRoot } from 'react-dom/client';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { Environment, Float, Box } from '@react-three/drei';
+import { Canvas } from '@react-three/fiber';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import SEO from './components/SEO.jsx';
+import SEO from '../components/SEO.jsx';
+import FloatingCubes from '../components/FloatingCubes.jsx';
 
 gsap.registerPlugin(ScrollTrigger);
 
-function FloatingCubes() {
-  const group = useRef();
-  
-  useFrame((state) => {
-    group.current.rotation.y = state.clock.elapsedTime * 0.1;
-  });
-
-  return (
-    <group ref={group}>
-      {[...Array(5)].map((_, i) => (
-        <Float key={i} speed={2} rotationIntensity={2} floatIntensity={3}>
-          <Box args={[0.5, 0.5, 0.5]} position={[(Math.random() - 0.5) * 6, (Math.random() - 0.5) * 4, (Math.random() - 0.5) * 4]}>
-            <meshStandardMaterial 
-              color="#ff3cac"
-              transparent={true}
-              opacity={0.3}
-              roughness={0.1}
-              metalness={0.8}
-            />
-          </Box>
-        </Float>
-      ))}
-      <Environment preset="night" />
-    </group>
-  );
-}
-
-function WorkApp() {
+function Work() {
   const containerRef = useRef();
 
   useLayoutEffect(() => {
@@ -87,18 +59,18 @@ function WorkApp() {
   return (
     <div ref={containerRef} style={{ width: '100vw', overflow: 'hidden' }}>
       <SEO
-        title="Our Work — Portfolio & Case Studies"
-        description="Explore ShajamX's portfolio of premium web development projects including immersive 3D experiences, SaaS platforms, e-commerce stores, and brand identities built with React and Three.js."
+        title="Best Web Development Portfolio in Kolkata & Mumbai"
+        description="Explore ShajamX's work. Our portfolio features premium 3D web experiences, SaaS platforms, and e-commerce stores built for clients in Kolkata, Mumbai, and globally."
         path="/work"
       />
       
       {/* Hero */}
       <section style={{ padding: '15vmax 5% 5vmax', textAlign: 'center', position: 'relative' }}>
         <div style={{ overflow: 'hidden' }}>
-          <h1 className="hero-headline react-hero-title" style={{ fontSize: 'clamp(2.5rem, 8vw, 8rem)', letterSpacing: '-0.02em', margin: 0 }}>SELECTED WORK</h1>
+          <h1 className="hero-headline react-hero-title" style={{ fontSize: 'clamp(2.5rem, 8vw, 8rem)', letterSpacing: '-0.02em', margin: 0 }}>PORTFOLIO</h1>
         </div>
         <p className="react-hero-subtext" style={{ fontSize: 'clamp(1rem, 2vw, 1.5rem)', color: '#f0f0f0', maxWidth: '800px', margin: '1rem auto' }}>
-          Discover the immersive digital worlds we've created for leading brands and innovative startups.
+          Premium 3D digital worlds engineered for brands in Kolkata, Mumbai, and beyond.
         </p>
       </section>
 
@@ -114,7 +86,7 @@ function WorkApp() {
           {projects.map((proj, i) => (
             <div key={i} className="work-card-react" style={{ display: 'flex', flexDirection: 'column' }}>
               {/* Floating VISUAL Card */}
-              {proj.image ? (
+              {proj.image && (
                 <div style={{ 
                       width: '100%', 
                       borderRadius: '12px', 
@@ -126,24 +98,11 @@ function WorkApp() {
                      }} 
                      onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-10px)'; e.currentTarget.style.boxShadow = `0 30px 60px ${proj.color}20`; }}
                      onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 20px 40px rgba(0,0,0,0.5)'; }}>
-                  <img src={proj.image} alt={proj.title} style={{ width: '100%', height: 'auto', display: 'block' }} />
-                </div>
-              ) : (
-                <div style={{ 
-                      width: '100%', 
-                      height: 'clamp(280px, 40vw, 420px)',
-                      background: `linear-gradient(135deg, ${proj.color}, #0d0d14)`, 
-                      borderRadius: '12px', 
-                      border: '1px solid rgba(255,255,255,0.05)', 
-                      boxShadow: '0 20px 40px rgba(0,0,0,0.5)', 
-                      transition: 'transform 0.4s ease, box-shadow 0.4s ease' 
-                     }} 
-                     onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-10px)'; e.currentTarget.style.boxShadow = `0 30px 60px ${proj.color}20`; }}
-                     onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 20px 40px rgba(0,0,0,0.5)'; }}>
+                  <img src={proj.image} alt={`${proj.title} - ${proj.tags} project by ShajamX`} style={{ width: '100%', height: 'auto', display: 'block' }} />
                 </div>
               )}
               
-              {/* OUTSIDE Information Section (Editorial Feel) */}
+              {/* Information Section */}
               <div style={{ paddingTop: '1.8rem', display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', marginBottom: '1rem' }}>
                   <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: proj.color, boxShadow: `0 0 10px ${proj.color}` }}></div>
@@ -161,4 +120,4 @@ function WorkApp() {
   );
 }
 
-export default WorkApp;
+export default Work;

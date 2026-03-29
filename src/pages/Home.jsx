@@ -79,20 +79,24 @@ export default function Home() {
   const homeStructuredData = {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    "name": "ShajamX — Premium Web Development & Digital Agency",
-    "description": "ShajamX builds stunning, high-performance websites and digital experiences using React, GSAP animations, and Three.js.",
+    "name": "ShajamX — #1 Web Development & 3D Agency in Kolkata & Mumbai",
+    "description": "ShajamX is a premier digital agency building stunning, high-performance websites and 3D experiences for businesses in Kolkata, Mumbai, and globally.",
     "url": "https://shajamx.com/",
     "breadcrumb": {
       "@type": "BreadcrumbList",
       "itemListElement": [{ "@type": "ListItem", "position": 1, "name": "Home", "item": "https://shajamx.com/" }]
-    }
+    },
+    "areaServed": [
+      { "@type": "City", "name": "Kolkata" },
+      { "@type": "City", "name": "Mumbai" }
+    ]
   };
 
   return (
     <div ref={containerRef} id="home-wrapper">
       <SEO
-        title="ShajamX — Premium Web Development & Digital Agency"
-        description="We build immersive, high-performance websites using React, GSAP, and Three.js. Stunning UI/UX, lightning-fast code, and bold design that converts."
+        title="Web Development & 3D Agency in Kolkata & Mumbai"
+        description="ShajamX builds immersive, high-performance websites in Kolkata and Mumbai. Specializing in React, GSAP, and Three.js for bold design that converts."
         path="/"
         structuredData={homeStructuredData}
       />
@@ -111,14 +115,14 @@ export default function Home() {
         <div className="hero-content">
           <div className="hero-mono-text" id="hero-mono"></div>
           <h1 className="hero-headline">
-            <div className="split-wrapper"><div className="hero-line">WE BUILD</div></div>
-            <div className="split-wrapper"><div className="hero-line">DIGITAL</div></div>
-            <div className="split-wrapper"><div className="hero-line">WORLDS</div></div>
+            <div className="split-wrapper"><div className="hero-line">3D WEB</div></div>
+            <div className="split-wrapper"><div className="hero-line">AGENCY IN</div></div>
+            <div className="split-wrapper"><div className="hero-line">KOL-MUM</div></div>
           </h1>
           <div className="hero-accent-line"></div>
           <p className="hero-body-text">
-            Not just websites.<br/>
-            Experiences that convert.
+            Elevating brands in Kolkata, Mumbai, and beyond.<br/>
+            Experiences that convert traffic into revenue.
           </p>
         </div>
         <div className="scroll-cta">
@@ -174,6 +178,11 @@ export default function Home() {
             <div className="service-number">06</div>
             <div className="service-name">Brand Identity &amp; UI Systems</div>
             <div className="service-desc">Cohesive design languages across all touchpoints.</div>
+          </div>
+          <div style={{ marginTop: '2rem', textAlign: 'right' }}>
+            <Link to="/services" className="cta-link-react" title="View Full List of Web Development Services">
+              View All Services <span style={{ marginLeft: '10px' }}>→</span>
+            </Link>
           </div>
         </div>
       </section>
@@ -249,6 +258,12 @@ export default function Home() {
             <p className="usp-text">Interfaces that breathe. We use WebGL and immersive interactions to turn standard websites into interactive narratives that users dont just browse—they experience.</p>
           </div>
         </div>
+
+        <div style={{ textAlign: 'center', marginTop: '4rem' }}>
+          <Link to="/why-us" className="cta-link-react" title="Why Choose ShajamX for your Project">
+            Learn More Why ShajamX <span style={{ marginLeft: '10px' }}>→</span>
+          </Link>
+        </div>
       </section>
 
       <section id="work">
@@ -256,62 +271,62 @@ export default function Home() {
           <div className="work-track">
             <div className="work-card">
               <div className="work-img">
-                <img src="https://ik.imagekit.io/ioktbcewp/enhanced_image.png?tr=w-1000,q-80,f-auto" alt="SHAJAMX" />
+                <img src="https://ik.imagekit.io/ioktbcewp/enhanced_image.png?tr=w-1000,q-80,f-auto" alt="ShajamX - Premium Web Agency Portfolio Item" />
               </div>
               <div className="work-info">
                 <h3 className="work-title">SHAJAMX</h3>
                 <div className="work-tags">REACT · 3D · GSAP</div>
-                <Link to="/work" className="work-arrow">↗</Link>
+                <Link to="/work" className="work-arrow" title="View ShajamX Portfolio Case Study">↗</Link>
               </div>
             </div>
             <div className="work-card">
               <div className="work-img">
-                <img src="https://ik.imagekit.io/ioktbcewp/AURA%20X%20spatial%20computing%20interface%20concept.png?tr=w-1000,q-80,f-auto" alt="AURA X" />
+                <img src="https://ik.imagekit.io/ioktbcewp/AURA%20X%20spatial%20computing%20interface%20concept.png?tr=w-1000,q-80,f-auto" alt="Aura X - 3D Interface Design" />
               </div>
               <div className="work-info">
                 <h3 className="work-title">AURA X</h3>
                 <div className="work-tags">UI/UX · MOTION · WEBGL</div>
-                <Link to="/work" className="work-arrow">↗</Link>
+                <Link to="/work" className="work-arrow" title="View Aura X Spatial Computing Case Study">↗</Link>
               </div>
             </div>
             <div className="work-card">
               <div className="work-img">
-                <img src="https://ik.imagekit.io/ioktbcewp/ChatGPT%20Image%20Mar%2028,%202026,%2009_39_53%20PM.png?tr=w-1000,q-80,f-auto" alt="NEURAL KINETICS" />
+                <img src="https://ik.imagekit.io/ioktbcewp/ChatGPT%20Image%20Mar%2028,%202026,%2009_39_53%20PM.png?tr=w-1000,q-80,f-auto" alt="Neural Kinetics - AI Branding Concept" />
               </div>
               <div className="work-info">
                 <h3 className="work-title">NEURAL KINETICS</h3>
                 <div className="work-tags">BRANDING · DIGITAL EXPERIENCE</div>
-                <Link to="/work" className="work-arrow">↗</Link>
+                <Link to="/work" className="work-arrow" title="View Neural Kinetics Branding Case Study">↗</Link>
               </div>
             </div>
             <div className="work-card">
               <div className="work-img">
-                <img src="https://ik.imagekit.io/ioktbcewp/ChatGPT%20Image%20Mar%2028,%202026,%2009_54_54%20PM.png?tr=w-1000,q-80,f-auto" alt="LUMINA" />
+                <img src="https://ik.imagekit.io/ioktbcewp/ChatGPT%20Image%20Mar%2028,%202026,%2009_54_54%20PM.png?tr=w-1000,q-80,f-auto" alt="Lumina - Headless E-commerce Design" />
               </div>
               <div className="work-info">
                 <h3 className="work-title">LUMINA</h3>
                 <div className="work-tags">E-COMMERCE · UI/UX</div>
-                <Link to="/work" className="work-arrow">↗</Link>
+                <Link to="/work" className="work-arrow" title="View Lumina E-commerce Case Study">↗</Link>
               </div>
             </div>
             <div className="work-card">
               <div className="work-img">
-                <img src="https://ik.imagekit.io/ioktbcewp/Nexus%20core%20in%20binary%20hands.png?tr=w-1000,q-80,f-auto" alt="NEXUS CORE" />
+                <img src="https://ik.imagekit.io/ioktbcewp/Nexus%20core%20in%20binary%20hands.png?tr=w-1000,q-80,f-auto" alt="Nexus Core - SaaS Platform UI Design" />
               </div>
               <div className="work-info">
                 <h3 className="work-title">NEXUS CORE</h3>
                 <div className="work-tags">SaaS · PLATFORM</div>
-                <Link to="/work" className="work-arrow">↗</Link>
+                <Link to="/work" className="work-arrow" title="View Nexus Core SaaS Case Study">↗</Link>
               </div>
             </div>
             <div className="work-card">
               <div className="work-img">
-                <img src="https://ik.imagekit.io/ioktbcewp/ChatGPT%20Image%20Mar%2028,%202026,%2009_45_35%20PM.png?tr=w-1000,q-80,f-auto" alt="SYNESTHESIA" />
+                <img src="https://ik.imagekit.io/ioktbcewp/ChatGPT%20Image%20Mar%2028,%202026,%2009_45_35%20PM.png?tr=w-1000,q-80,f-auto" alt="Synesthesia - Interactive Audio Visualizer" />
               </div>
               <div className="work-info">
                 <h3 className="work-title">SYNESTHESIA</h3>
                 <div className="work-tags">INTERACTION · ANIMATION</div>
-                <Link to="/work" className="work-arrow">↗</Link>
+                <Link to="/work" className="work-arrow" title="View Synesthesia Music Visualization Case Study">↗</Link>
               </div>
             </div>
           </div>
@@ -359,6 +374,11 @@ export default function Home() {
               <span className="about-bracket">]</span>
             </div>
             <div className="about-loc">KOLKATA · INDIA · GLOBAL</div>
+            <div style={{ marginTop: '2rem' }}>
+              <Link to="/about" className="cta-link-react" title="Learn more About the ShajamX Team">
+                Get to Know Us <span style={{ marginLeft: '10px' }}>→</span>
+              </Link>
+            </div>
           </div>
         </div>
       </section>

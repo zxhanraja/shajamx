@@ -1,59 +1,37 @@
-import React, { useRef, useLayoutEffect, useState } from 'react';
-import { createRoot } from 'react-dom/client';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { Environment, Float, TorusKnot, MeshWobbleMaterial } from '@react-three/drei';
+import React, { useRef, useLayoutEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { Canvas } from '@react-three/fiber';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import SEO from './components/SEO.jsx';
+import SEO from '../components/SEO.jsx';
+import BackgroundKnot from '../components/BackgroundKnot.jsx';
+import AccordionItem from '../components/AccordionItem.jsx';
 
 gsap.registerPlugin(ScrollTrigger);
 
-function BackgroundKnot() {
-  const meshRef = useRef();
-  
-  useFrame((state) => {
-    meshRef.current.rotation.x = state.clock.elapsedTime * 0.2;
-    meshRef.current.rotation.y = state.clock.elapsedTime * 0.1;
-  });
-
-  return (
-    <Float speed={1} rotationIntensity={0.5} floatIntensity={1}>
-      <TorusKnot ref={meshRef} args={[3, 0.4, 64, 16]} position={[0, 0, -2]}>
-        <MeshWobbleMaterial color="#00e5ff" factor={1} speed={2} wireframe opacity={0.3} transparent />
-      </TorusKnot>
-    </Float>
-  );
-}
-
-function AccordionItem({ question, answer }) {
-  const [open, setOpen] = useState(false);
-  const contentRef = useRef();
-
-  return (
-    <div style={{ borderBottom: '1px solid #1e1e2e', padding: '1.5rem 0', cursor: 'pointer' }} onClick={() => setOpen(!open)}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '1.2rem', fontWeight: 700 }}>
-        <span>{question}</span>
-        <span style={{ color: '#00e5ff', transform: open ? 'rotate(45deg)' : 'rotate(0deg)', transition: 'transform 0.3s ease' }}>+</span>
-      </div>
-      <div 
-        ref={contentRef}
-        style={{ 
-          maxHeight: open ? '200px' : '0px', 
-          overflow: 'hidden', 
-          transition: 'max-height 0.3s ease',
-          color: '#f0f0f0',
-          opacity: 0.8,
-          marginTop: open ? '1rem' : '0'
-        }}
-      >
-        {answer}
-      </div>
-    </div>
-  );
-}
-
-function ServicesApp() {
+function Services() {
   const containerRef = useRef();
+
+  const servicesSchema = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "serviceType": "Web Development & Design",
+    "provider": { "@type": "Organization", "name": "ShajamX" },
+    "areaServed": [
+      { "@type": "City", "name": "Kolkata" },
+      { "@type": "City", "name": "Mumbai" }
+    ],
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Web Development Tiers",
+      "itemListElement": [
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Starter Website Package" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Growth Business Package" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Professional Domination Package" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Enterprise Custom Solutions" } }
+      ]
+    }
+  };
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
@@ -74,11 +52,11 @@ function ServicesApp() {
       });
 
       const tiers = gsap.utils.toArray('.tier-card');
-      // Pre-hide IMMEDIATELY (synchronous) so cards never flash visible
+      // Pre-hide IMMEDIATELY
       gsap.set(tiers, { opacity: 0, y: 80, visibility: 'hidden' });
       ScrollTrigger.create({
         trigger: '.tiers-grid',
-        start: 'top 90%',  // fire earlier especially on mobile
+        start: 'top 90%',
         once: true,
         onEnter: () => {
           gsap.to(tiers, {
@@ -93,9 +71,10 @@ function ServicesApp() {
   return (
     <div ref={containerRef} style={{ width: '100vw', overflow: 'hidden' }}>
       <SEO
-        title="Our Services — Web Development, UI/UX Design & More"
-        description="ShajamX offers premium web development, UI/UX design, React development, GSAP animation, Three.js 3D, performance optimization, and e-commerce solutions."
+        title="Premium Web Development Services in Kolkata & Mumbai"
+        description="ShajamX offers high-end web development, 3D design, and motion design services for businesses in Kolkata and Mumbai. Custom React & Three.js solutions."
         path="/services"
+        structuredData={servicesSchema}
       />
       
       {/* Hero */}
@@ -109,10 +88,10 @@ function ServicesApp() {
         
         <div style={{ zIndex: 10, textAlign: 'center', padding: '0 5%' }}>
           <div style={{ overflow: 'hidden' }}>
-            <h1 className="hero-headline react-hero-title" style={{ fontSize: 'clamp(2rem, 10vw, 8rem)', letterSpacing: '-0.02em', mixBlendMode: 'difference', margin: 0 }}>OUR SERVICES</h1>
+            <h1 className="hero-headline react-hero-title" style={{ fontSize: 'clamp(2rem, 10vw, 8rem)', letterSpacing: '-0.02em', mixBlendMode: 'difference', margin: 0 }}>SERVICES</h1>
           </div>
           <p className="react-hero-subtext" style={{ fontSize: 'clamp(0.95rem, 3vw, 1.2rem)', marginTop: '1rem', color: '#f0f0f0', maxWidth: '800px', margin: '1rem auto 0' }}>
-            We deliver end-to-end digital solutions, from strategy and brand identity, down to complex WebGL interactions and high-performance engineering.
+            Premier digital engineering for Kolkata & Mumbai. From brand identity to complex 3D WebGL interactions and high-performance engineering.
           </p>
         </div>
       </section>
@@ -260,7 +239,6 @@ function ServicesApp() {
       {/* Pricing / Tiers */}
       <section style={{ padding: '10vmax 2%', background: '#07070a', position: 'relative' }}>
         <style>{`
-          /* ── TIER CARDS ── */
           .tier-card-new {
             background: linear-gradient(160deg, rgba(20,20,30,0.7) 0%, rgba(8,8,12,0.95) 100%);
             border: 1px solid rgba(255,255,255,0.05);
@@ -416,12 +394,10 @@ function ServicesApp() {
             border-color: var(--tc);
             color: var(--tc);
           }
-          /* ── COMPARISON TABLE ── */
           .comp-table-wrap {
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
             scrollbar-width: none;
-            -ms-overflow-style: none;
           }
           .comp-table-wrap::-webkit-scrollbar {
             display: none;
@@ -476,11 +452,11 @@ function ServicesApp() {
           <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
             <h2 className="section-title" style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', letterSpacing: '-0.02em', margin: 0 }}>SERVICE TIERS</h2>
             <p style={{ color: '#a0a0b0', fontSize: '1.1rem', marginTop: '1rem', fontFamily: 'Space Mono, monospace' }}>
-              Custom pricing · 50–50 payment · Built for Indian businesses
+              Custom pricing · 50–50 payment · Optimized for Indian Markets
             </p>
           </div>
 
-          {/* 4 Cards Grid */}
+          {/* Cards Grid */}
           <div className="tiers-grid tiers-grid-new" style={{ alignItems: 'start' }}>
 
             {/* STARTER */}
@@ -678,9 +654,16 @@ function ServicesApp() {
         </div>
       </section>
 
+      {/* Footer CTA */}
+      <section style={{ padding: '5vmax 5% 10vmax', textAlign: 'center' }}>
+        <h2 style={{ fontSize: 'clamp(2rem, 5vw, 4rem)', marginBottom: '2rem' }}>READY TO START?</h2>
+        <Link to="/work" className="cta-link-react" style={{ fontSize: '1.2rem' }} title="Explore our Portfolio of 3D Web Projects">
+          Explore Our Portoflio <span style={{ marginLeft: '10px' }}>→</span>
+        </Link>
+      </section>
+
     </div>
   );
 }
 
-export default ServicesApp;
-
+export default Services;

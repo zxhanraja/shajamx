@@ -1,39 +1,14 @@
 import React, { useRef, useLayoutEffect } from 'react';
-import { createRoot } from 'react-dom/client';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { MeshDistortMaterial, Sphere, Float } from '@react-three/drei';
+import { Link } from 'react-router-dom';
+import { Canvas } from '@react-three/fiber';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import SEO from './components/SEO.jsx';
+import SEO from '../components/SEO.jsx';
+import CoreOrb from '../components/CoreOrb.jsx';
 
 gsap.registerPlugin(ScrollTrigger);
 
-function CoreOrb() {
-  const meshRef = useRef();
-
-  useFrame((state) => {
-    meshRef.current.rotation.x = state.clock.elapsedTime * 0.2;
-    meshRef.current.rotation.y = state.clock.elapsedTime * 0.3;
-  });
-
-  return (
-    <Float speed={1.5} rotationIntensity={1} floatIntensity={1}>
-      <Sphere ref={meshRef} args={[1, 16, 16]} scale={1.8}>
-        <MeshDistortMaterial
-          color="#c8ff00"
-          attach="material"
-          distort={0.4}
-          speed={1.5}
-          roughness={0.3}
-          metalness={0.7}
-          wireframe={false}
-        />
-      </Sphere>
-    </Float>
-  );
-}
-
-function AboutApp() {
+function About() {
   const containerRef = useRef();
 
   useLayoutEffect(() => {
@@ -71,7 +46,7 @@ function AboutApp() {
       // Pre-hide vertically stacked sections
       gsap.set('.team-row-react', { opacity: 0, y: 80, visibility: 'hidden' });
 
-      // Clean up previous team grid scroll trigger code and animate new rows vertically
+      // Team grid animations
       gsap.utils.toArray('.team-row-react').forEach((row) => {
         const img = row.querySelector('.team-img-react');
         const textElements = row.querySelectorAll('.team-info-react > *');
@@ -103,8 +78,8 @@ function AboutApp() {
   return (
     <div ref={containerRef} style={{ width: '100vw', overflow: 'hidden' }}>
       <SEO
-        title="About Us — Meet the ShajamX Team"
-        description="ShajamX is a team of designers and developers obsessed with building things that move. Meet our core team and learn about our mission."
+        title="About our 3D Web Agency in Kolkata & Mumbai"
+        description="Meet the ShajamX team. We are a premier 3D web development agency serving clients in Kolkata, Mumbai, and globally with bold digital experiences."
         path="/about"
       />
       
@@ -132,9 +107,9 @@ function AboutApp() {
       {/* Mission */}
       <section className="mission-section" style={{ padding: '10vmax 5%', background: '#0d0d14' }}>
         <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
-          <h2 className="section-title mission-title" style={{ marginBottom: '2rem' }}>OUR MISSION</h2>
+          <h2 className="section-title mission-title" style={{ marginBottom: '2rem' }}>OUR MISSION IN INDIA</h2>
           <p className="mission-text" style={{ fontSize: 'clamp(1.2rem, 3vw, 2.5rem)', lineHeight: 1.4, color: '#f0f0f0' }}>
-            To push the boundaries of the web through <span style={{ color: '#c8ff00' }}>innovative engineering</span> and <span style={{ color: '#ff3cac' }}>bold aesthetics</span>. We believe the internet should be an experience, not just a destination.
+            To lead the next wave of the Indian web through <span style={{ color: '#c8ff00' }}>innovative engineering</span> in Kolkata and <span style={{ color: '#ff3cac' }}>bold aesthetics</span> in Mumbai. We build internet experiences, not just destinations.
           </p>
         </div>
       </section>
@@ -208,30 +183,44 @@ function AboutApp() {
             { 
               name: 'SHAISTA HANIF', 
               role: 'Creative Director & Lead Dev', 
+              location: 'Kolkata',
               image: 'https://ik.imagekit.io/ioktbcewp/ChatGPT%20Image%20Mar%2027,%202026,%2005_26_34%20PM.png',
               bio: 'The visionary behind ShajamX. Blending high-performance engineering with avant-garde aesthetics to craft unforgettable digital experiences.',
-              bio2: 'Shaista drives the core creative direction, ensuring that every project not only meets technical standards but pushes the boundaries of modern web design.'
+              bio2: 'Shaista drives the core creative direction from Kolkata, ensuring that every project pushes the boundaries of modern web design.'
             },
             { 
               name: 'ZUBBER AKHTAR', 
               role: 'Senior UI/UX Designer', 
+              location: 'Mumbai',
               image: 'https://ik.imagekit.io/ioktbcewp/ChatGPT%20Image%20Mar%2027,%202026,%2005_15_41%20PM.png?updatedAt=1774612198693',
               bio: 'Master of user journeys. Zubber transforms complex flows into intuitive, seamless, and visually stunning interfaces with pixel-perfect precision.',
-              bio2: 'His approach combines deep user empathy with striking visual design, resulting in products that users love to interact with on a daily basis.'
+              bio2: 'Based in Mumbai, his approach combines deep user empathy with striking visual design, resulting in products that users love to interact with.'
             },
             { 
               name: 'ZEESHAN RAZA', 
               role: 'WebGL Engineer', 
+              location: 'India',
               image: 'https://ik.imagekit.io/ioktbcewp/ChatGPT%20Image%20Dec%2015,%202025,%2009_35_49%20AM.png?updatedAt=1765772371409',
               bio: 'Architect of immersive 3D content. Zeeshan leverages WebGL and Three.js to deliver buttery-smooth, interactive graphical worlds straight to your browser.',
-              bio2: 'From creative coding to rendering optimizations, he breathes life into static pages, turning them into unforgettable, interactive storytelling experiences.'
+              bio2: 'From creative coding to rendering optimizations, he breathes life into pages across Kolkata & Mumbai, turning them into interactive experiences.'
             }
           ].map((member, i) => (
             <div key={i} className="team-row-react">
-              <img src={member.image} alt={member.name} className="team-img-react" />
+              <script type="application/ld+json">
+                {JSON.stringify({
+                  "@context": "https://schema.org",
+                  "@type": "Person",
+                  "name": member.name,
+                  "jobTitle": member.role,
+                  "worksFor": { "@type": "Organization", "name": "ShajamX" },
+                  "address": { "@type": "PostalAddress", "addressLocality": member.location, "addressCountry": "IN" },
+                  "image": member.image
+                })}
+              </script>
+              <img src={member.image} alt={`${member.name} - ${member.role} at ShajamX`} className="team-img-react" />
               <div className="team-info-react">
                 <h3 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 800, marginBottom: '0.5rem', color: '#fff', letterSpacing: '-0.02em' }}>{member.name}</h3>
-                <p style={{ fontFamily: '"Space Mono", monospace', fontSize: '1rem', color: '#c8ff00', marginBottom: '1.5rem', letterSpacing: '1px', textTransform: 'uppercase' }}>{member.role}</p>
+                <p style={{ fontFamily: '"Space Mono", monospace', fontSize: '1rem', color: '#c8ff00', marginBottom: '1.5rem', letterSpacing: '1px', textTransform: 'uppercase' }}>{member.role} | {member.location}</p>
                 <p style={{ fontSize: '1.1rem', color: '#d0d0dc', lineHeight: 1.6, marginBottom: '1rem' }}>{member.bio}</p>
                 <p style={{ fontSize: '1.1rem', color: '#8a8a9e', lineHeight: 1.6 }}>{member.bio2}</p>
               </div>
@@ -240,8 +229,16 @@ function AboutApp() {
         </div>
       </section>
 
+      {/* Footer CTA */}
+      <section style={{ padding: '5vmax 5% 10vmax', textAlign: 'center' }}>
+        <h2 style={{ fontSize: 'clamp(2rem, 5vw, 4rem)', marginBottom: '2rem' }}>WANT TO WORK WITH US?</h2>
+        <Link to="/services" className="cta-link-react" style={{ fontSize: '1.2rem' }} title="View our Web Development Services and Packages">
+          Explore Our Services <span style={{ marginLeft: '10px' }}>→</span>
+        </Link>
+      </section>
+
     </div>
   );
 }
 
-export default AboutApp;
+export default About;

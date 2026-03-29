@@ -1,30 +1,14 @@
 import React, { useRef, useLayoutEffect } from 'react';
-import { createRoot } from 'react-dom/client';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { Stars, Float, Icosahedron } from '@react-three/drei';
+import { Canvas } from '@react-three/fiber';
+import { Stars } from '@react-three/drei';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import SEO from './components/SEO.jsx';
+import SEO from '../components/SEO.jsx';
+import AbstractCore from '../components/AbstractCore.jsx';
 
 gsap.registerPlugin(ScrollTrigger);
 
-function AbstractCore() {
-  const meshRef = useRef();
-  useFrame((state) => {
-    meshRef.current.rotation.x = state.clock.elapsedTime * 0.2;
-    meshRef.current.rotation.y = state.clock.elapsedTime * 0.3;
-  });
-
-  return (
-    <Float speed={2} rotationIntensity={1} floatIntensity={2}>
-      <Icosahedron ref={meshRef} args={[2, 0]} position={[0, 0, -2]}>
-        <meshStandardMaterial color="#c8ff00" wireframe />
-      </Icosahedron>
-    </Float>
-  );
-}
-
-function WhyUsApp() {
+function WhyUs() {
   const containerRef = useRef();
 
   useLayoutEffect(() => {
@@ -45,7 +29,7 @@ function WhyUsApp() {
         delay: 0.8
       });
 
-      // Pre-hide to prevent flashing
+      // Pre-hide
       gsap.set(['.comp-cell-react', '.usp-card'], { opacity: 0, y: 30, visibility: 'hidden' });
 
       ScrollTrigger.create({
@@ -197,8 +181,25 @@ function WhyUsApp() {
         </div>
       </section>
 
+      {/* Footer CTA */}
+      <section style={{ padding: '5vmax 5% 10vmax', textAlign: 'center' }}>
+        <h2 style={{ fontSize: 'clamp(2rem, 5vw, 4rem)', marginBottom: '2rem' }}>READY TO ELEVATE?</h2>
+        <a 
+          href="#contact" 
+          className="cta-link-react" 
+          style={{ fontSize: '1.2rem', cursor: 'none' }} 
+          title="Contact ShajamX to start your Project"
+          onClick={(e) => {
+            e.preventDefault();
+            window.dispatchEvent(new Event('open-contact'));
+          }}
+        >
+          Let's Build Something <span style={{ marginLeft: '10px' }}>→</span>
+        </a>
+      </section>
+
     </div>
   );
 }
 
-export default WhyUsApp;
+export default WhyUs;

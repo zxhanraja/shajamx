@@ -58,6 +58,41 @@ a, button, input, textarea {
   cursor: none;
 }
 
+.cta-link-react {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--accent);
+  text-decoration: none;
+  letter-spacing: 1px;
+  position: relative;
+  transition: color 0.3s ease;
+  padding: 5px 0;
+}
+
+.cta-link-react::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0%;
+  height: 1px;
+  background: var(--accent);
+  transition: width 0.3s ease;
+}
+
+.cta-link-react:hover {
+  color: #fff;
+}
+
+.cta-link-react:hover::after {
+  width: 100%;
+  background: #fff;
+}
+
 /* On mobile/touch devices: restore natural cursor and show pointer on links */
 @media (hover: none), (max-width: 768px) {
   body { cursor: auto; }

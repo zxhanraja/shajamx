@@ -1,9 +1,15 @@
 User-agent: *
 Allow: /
 
+# Service Areas
+Allow: /about
+Allow: /services
+Allow: /work
+Allow: /why-us
+
 Sitemap: https://shajamx.com/sitemap.xml
 
-# Disallow common non-content paths
+# Prevent indexing of system folders
 Disallow: /dist/
 Disallow: /node_modules/
 Disallow: /.git/

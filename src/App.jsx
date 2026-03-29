@@ -5,10 +5,10 @@ import Header from './components/Header.jsx';
 import Footer from './components/Footer.jsx';
 import ContactModal from './components/ContactModal.jsx';
 import Home from './pages/Home.jsx';
-import About from './AboutApp.jsx';
-import Services from './ServicesApp.jsx';
-import Work from './WorkApp.jsx';
-import WhyUs from './WhyUsApp.jsx';
+import About from './pages/About.jsx';
+import Services from './pages/Services.jsx';
+import Work from './pages/Work.jsx';
+import WhyUs from './pages/WhyUs.jsx';
 
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';

@@ -2,12 +2,25 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { TextPlugin } from 'gsap/TextPlugin';
 import Lenis from '@studio-freight/lenis';
-
-// Dynamic import Three.js components only when needed
-const getThree = async () => {
-  const THREE = await import('three');
-  return THREE;
-};
+import {
+  Scene,
+  PerspectiveCamera,
+  WebGLRenderer,
+  BufferGeometry,
+  BufferAttribute,
+  PointsMaterial,
+  Points,
+  AdditiveBlending,
+  IcosahedronGeometry,
+  MeshBasicMaterial,
+  Mesh,
+  Raycaster,
+  Vector2,
+  Vector3,
+  Plane,
+  SphereGeometry,
+  TorusKnotGeometry,
+} from 'three';
 
 let heroRafId, aboutRafId, testimonialsRafId, whyUsRafId, servicesRafId;
 let isHomeActive = false;

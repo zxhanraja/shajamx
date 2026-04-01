@@ -319,7 +319,7 @@ body::after {
   overflow: hidden;
   z-index: 1;
   /* Push content below the fixed header so mono-text (EST.) is always visible */
-  padding-top: clamp(80px, 11vh, 110px);
+  padding-top: clamp(130px, 18vh, 180px);
 }
 #hero-canvas {
   position: absolute;
@@ -371,7 +371,7 @@ body::after {
   transform-origin: left;
 }
 .hero-body-text {
-  font-size: clamp(14px, 2.5vw, 22px);
+  font-size: clamp(16px, 3.5vw, 28px);
   color: var(--text);
   max-width: 600px;
   margin-left: auto;

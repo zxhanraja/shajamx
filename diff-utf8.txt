@@ -1,0 +1,713 @@
+﻿diff --git a/index.html b/index.html
+index 197b197..86ab03f 100644
+--- a/index.html
++++ b/index.html
+@@ -3,6 +3,7 @@
+ <head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
++  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+ 
+   <!-- Primary SEO -->
+   <title>ShajamX ΓÇö #1 Web Development & 3D Agency in Kolkata & Mumbai</title>
+@@ -73,15 +74,12 @@
+   }
+   </script>
+ 
+-  <!-- Fonts -->
++  <!-- Performance Preloads -->
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+-
+-  <!-- Sitemap reference -->
++  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Mono:wght@400;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
++  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Mono:wght@400;700&display=swap"></noscript>
+   <link rel="sitemap" type="application/xml" href="/sitemap.xml">
+-
+-  <!-- CSS -->
+   <link rel="stylesheet" href="/style.css">
+ </head>
+ <body>
+diff --git a/public/favicon.ico b/public/favicon.ico
+new file mode 100644
+index 0000000..8e59490
+Binary files /dev/null and b/public/favicon.ico differ
+diff --git a/src/App.jsx b/src/App.jsx
+index 13e2dbf..f610a80 100644
+--- a/src/App.jsx
++++ b/src/App.jsx
+@@ -1,14 +1,23 @@
+-import React, { useEffect } from 'react';
++import React, { useEffect, Suspense, lazy } from 'react';
+ import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+ import { TransitionProvider } from './context/TransitionContext.jsx';
+ import Header from './components/Header.jsx';
+ import Footer from './components/Footer.jsx';
+ import ContactModal from './components/ContactModal.jsx';
+-import Home from './pages/Home.jsx';
+-import About from './pages/About.jsx';
+-import Services from './pages/Services.jsx';
+-import Work from './pages/Work.jsx';
+-import WhyUs from './pages/WhyUs.jsx';
++
++// Lazy load page components for better performance (splitting heavy Three.js/GSAP per page)
++const Home = lazy(() => import('./pages/Home.jsx'));
++const About = lazy(() => import('./pages/About.jsx'));
++const Services = lazy(() => import('./pages/Services.jsx'));
++const Work = lazy(() => import('./pages/Work.jsx'));
++const WhyUs = lazy(() => import('./pages/WhyUs.jsx'));
++
++// Minimal fallback loader
++const PageLoader = () => (
++  <div className="page-loader-mini">
++    <div className="loader-bar"></div>
++  </div>
++);
+ 
+ import gsap from 'gsap';
+ import { ScrollTrigger } from 'gsap/ScrollTrigger';
+@@ -122,13 +131,15 @@ export default function App() {
+         <ContactModal />
+         
+         <main id="spa-root">
+-          <Routes>
+-            <Route path="/" element={<Home />} />
+-            <Route path="/about" element={<About />} />
+-            <Route path="/services" element={<Services />} />
+-            <Route path="/work" element={<Work />} />
+-            <Route path="/why-us" element={<WhyUs />} />
+-          </Routes>
++          <Suspense fallback={<PageLoader />}>
++            <Routes>
++              <Route path="/" element={<Home />} />
++              <Route path="/about" element={<About />} />
++              <Route path="/services" element={<Services />} />
++              <Route path="/work" element={<Work />} />
++              <Route path="/why-us" element={<WhyUs />} />
++            </Routes>
++          </Suspense>
+         </main>
+ 
+         <Footer />
+diff --git a/src/components/Footer.jsx b/src/components/Footer.jsx
+index c3cafbd..ed47077 100644
+--- a/src/components/Footer.jsx
++++ b/src/components/Footer.jsx
+@@ -94,22 +94,22 @@ export default function Footer() {
+           </p>
+         </div>
+         <div className="footer-right">
+-          <div className="footer-nav-col">
++          <nav className="footer-nav-col" aria-label="Footer Pages">
+             <div className="footer-nav-heading">Pages</div>
+-            <a href="/" onClick={(e) => handleLinkClick(e, '/')} className="footer-link">Home</a>
+-            <a href="/services" onClick={(e) => handleLinkClick(e, '/services')} className="footer-link">Services</a>
+-            <a href="/work" onClick={(e) => handleLinkClick(e, '/work')} className="footer-link">Our Work</a>
+-            <a href="/about" onClick={(e) => handleLinkClick(e, '/about')} className="footer-link">About Us</a>
+-            <a href="/why-us" onClick={(e) => handleLinkClick(e, '/why-us')} className="footer-link">Why ShajamX</a>
+-          </div>
+-          <div className="footer-nav-col">
++            <a href="/" onClick={(e) => handleLinkClick(e, '/')} className="footer-link" aria-label="Go to Home">Home</a>
++            <a href="/services" onClick={(e) => handleLinkClick(e, '/services')} className="footer-link" aria-label="Go to Services">Services</a>
++            <a href="/work" onClick={(e) => handleLinkClick(e, '/work')} className="footer-link" aria-label="Go to Our Work">Our Work</a>
++            <a href="/about" onClick={(e) => handleLinkClick(e, '/about')} className="footer-link" aria-label="Go to About Us">About Us</a>
++            <a href="/why-us" onClick={(e) => handleLinkClick(e, '/why-us')} className="footer-link" aria-label="Go to Why ShajamX">Why ShajamX</a>
++          </nav>
++          <nav className="footer-nav-col" aria-label="Footer Services">
+             <div className="footer-nav-heading">Services</div>
+-            <a href="/services" onClick={(e) => handleLinkClick(e, '/services')} className="footer-link">Web Development</a>
+-            <a href="/services" onClick={(e) => handleLinkClick(e, '/services')} className="footer-link">UI/UX Design</a>
+-            <a href="/services" onClick={(e) => handleLinkClick(e, '/services')} className="footer-link">React Development</a>
+-            <a href="/services" onClick={(e) => handleLinkClick(e, '/services')} className="footer-link">GSAP Animation</a>
+-            <a href="/services" onClick={(e) => handleLinkClick(e, '/services')} className="footer-link">Three.js 3D Web</a>
+-          </div>
++            <a href="/services" onClick={(e) => handleLinkClick(e, '/services')} className="footer-link" aria-label="Service: Web Development">Web Development</a>
++            <a href="/services" onClick={(e) => handleLinkClick(e, '/services')} className="footer-link" aria-label="Service: UI/UX Design">UI/UX Design</a>
++            <a href="/services" onClick={(e) => handleLinkClick(e, '/services')} className="footer-link" aria-label="Service: React Development">React Development</a>
++            <a href="/services" onClick={(e) => handleLinkClick(e, '/services')} className="footer-link" aria-label="Service: GSAP Animation">GSAP Animation</a>
++            <a href="/services" onClick={(e) => handleLinkClick(e, '/services')} className="footer-link" aria-label="Service: Three.js 3D Web">Three.js 3D Web</a>
++          </nav>
+         </div>
+       </div>
+ 
+diff --git a/src/components/Header.jsx b/src/components/Header.jsx
+index 71a9b4c..bcbaca0 100644
+--- a/src/components/Header.jsx
++++ b/src/components/Header.jsx
+@@ -56,7 +56,7 @@ export default function Header() {
+     };
+ 
+     return (
+-      <a href={to} onClick={handleClick} className={`nav-link ${isActive ? 'active' : ''} ${className}`}>
++      <a href={to} onClick={handleClick} className={`nav-link ${isActive ? 'active' : ''} ${className}`} aria-label={`Navigate to ${children}`}>
+         {children}
+       </a>
+     );
+@@ -64,8 +64,8 @@ export default function Header() {
+ 
+   return (
+     <header id="header">
+-      <NavLink to="/" className="nav-logo" style={{ textDecoration: 'none' }}>SHAJAMX</NavLink>
+-      <nav className="nav-links">
++      <NavLink to="/" className="nav-logo">SHAJAMX</NavLink>
++      <nav className="nav-links" aria-label="Main Navigation">
+         <NavLink to="/services">Services</NavLink>
+         <NavLink to="/why-us">Why Us</NavLink>
+         <NavLink to="/work">Work</NavLink>
+@@ -73,15 +73,21 @@ export default function Header() {
+       </nav>
+       <div className="header-right">
+         <NavLink to="/#contact" className="nav-cta">Let's Talk</NavLink>
+-        <div className="hamburger-menu" onClick={toggleMenu}>
++        <button 
++          className="hamburger-menu" 
++          onClick={toggleMenu}
++          aria-label={menuOpen ? "Close Menu" : "Open Menu"}
++          aria-expanded={menuOpen}
++          style={{ background: 'none', border: 'none', padding: 0 }}
++        >
+           <span className="line-1"></span>
+           <span className="line-2"></span>
+           <span className="line-3"></span>
+-        </div>
++        </button>
+       </div>
+       
+-      <div className="mobile-menu-overlay">
+-        <nav className="mobile-nav-links">
++      <div className="mobile-menu-overlay" aria-hidden={!menuOpen}>
++        <nav className="mobile-nav-links" aria-label="Mobile Navigation">
+           <NavLink to="/">HOME</NavLink>
+           <NavLink to="/services">SERVICES</NavLink>
+           <NavLink to="/why-us">WHY US</NavLink>
+diff --git a/src/pages/Home.jsx b/src/pages/Home.jsx
+index b3ca628..c7b4311 100644
+--- a/src/pages/Home.jsx
++++ b/src/pages/Home.jsx
+@@ -271,7 +271,14 @@ export default function Home() {
+           <div className="work-track">
+             <div className="work-card">
+               <div className="work-img">
+-                <img src="https://ik.imagekit.io/ioktbcewp/enhanced_image.png?tr=w-1000,q-80,f-auto" alt="ShajamX - Premium Web Agency Portfolio Item" />
++                <img 
++                  src="https://ik.imagekit.io/ioktbcewp/enhanced_image.png?tr=w-1000,q-80,f-auto" 
++                  srcSet="https://ik.imagekit.io/ioktbcewp/enhanced_image.png?tr=w-400,q-70,f-auto 400w, https://ik.imagekit.io/ioktbcewp/enhanced_image.png?tr=w-800,q-80,f-auto 800w, https://ik.imagekit.io/ioktbcewp/enhanced_image.png?tr=w-1200,q-80,f-auto 1200w"
++                  sizes="(max-width: 768px) 100vw, 50vw"
++                  alt="ShajamX - Premium Web Agency Portfolio Item" 
++                  loading="lazy"
++                  decoding="async"
++                />
+               </div>
+               <div className="work-info">
+                 <h3 className="work-title">SHAJAMX</h3>
+@@ -281,7 +288,13 @@ export default function Home() {
+             </div>
+             <div className="work-card">
+               <div className="work-img">
+-                <img src="https://ik.imagekit.io/ioktbcewp/AURA%20X%20spatial%20computing%20interface%20concept.png?tr=w-1000,q-80,f-auto" alt="Aura X - 3D Interface Design" />
++                <img 
++                  src="https://ik.imagekit.io/ioktbcewp/AURA%20X%20spatial%20computing%20interface%20concept.png?tr=w-1000,q-80,f-auto" 
++                  srcSet="https://ik.imagekit.io/ioktbcewp/AURA%20X%20spatial%20computing%20interface%20concept.png?tr=w-400,q-70,f-auto 400w, https://ik.imagekit.io/ioktbcewp/AURA%20X%20spatial%20computing%20interface%20concept.png?tr=w-800,q-80,f-auto 800w, https://ik.imagekit.io/ioktbcewp/AURA%20X%20spatial%20computing%20interface%20concept.png?tr=w-1200,q-80,f-auto 1200w"
++                  sizes="(max-width: 768px) 100vw, 50vw"
++                  alt="Aura X - 3D Interface Design" 
++                  loading="lazy"
++                />
+               </div>
+               <div className="work-info">
+                 <h3 className="work-title">AURA X</h3>
+@@ -291,7 +304,13 @@ export default function Home() {
+             </div>
+             <div className="work-card">
+               <div className="work-img">
+-                <img src="https://ik.imagekit.io/ioktbcewp/ChatGPT%20Image%20Mar%2028,%202026,%2009_39_53%20PM.png?tr=w-1000,q-80,f-auto" alt="Neural Kinetics - AI Branding Concept" />
++                <img 
++                  src="https://ik.imagekit.io/ioktbcewp/ChatGPT%20Image%20Mar%2028,%202026,%2009_39_53%20PM.png?tr=w-1000,q-80,f-auto" 
++                  srcSet="https://ik.imagekit.io/ioktbcewp/ChatGPT%20Image%20Mar%2028,%202026,%2009_39_53%20PM.png?tr=w-400,q-70,f-auto 400w, https://ik.imagekit.io/ioktbcewp/ChatGPT%20Image%20Mar%2028,%202026,%2009_39_53%20PM.png?tr=w-800,q-80,f-auto 800w, https://ik.imagekit.io/ioktbcewp/ChatGPT%20Image%20Mar%2028,%202026,%2009_39_53%20PM.png?tr=w-1200,q-80,f-auto 1200w"
++                  sizes="(max-width: 768px) 100vw, 50vw"
++                  alt="Neural Kinetics - AI Branding Concept" 
++                  loading="lazy"
++                />
+               </div>
+               <div className="work-info">
+                 <h3 className="work-title">NEURAL KINETICS</h3>
+@@ -301,7 +320,13 @@ export default function Home() {
+             </div>
+             <div className="work-card">
+               <div className="work-img">
+-                <img src="https://ik.imagekit.io/ioktbcewp/ChatGPT%20Image%20Mar%2028,%202026,%2009_54_54%20PM.png?tr=w-1000,q-80,f-auto" alt="Lumina - Headless E-commerce Design" />
++                <img 
++                  src="https://ik.imagekit.io/ioktbcewp/ChatGPT%20Image%20Mar%2028,%202026,%2009_54_54%20PM.png?tr=w-1000,q-80,f-auto" 
++                  srcSet="https://ik.imagekit.io/ioktbcewp/ChatGPT%20Image%20Mar%2028,%202026,%2009_54_54%20PM.png?tr=w-400,q-70,f-auto 400w, https://ik.imagekit.io/ioktbcewp/ChatGPT%20Image%20Mar%2028,%202026,%2009_54_54%20PM.png?tr=w-800,q-80,f-auto 800w, https://ik.imagekit.io/ioktbcewp/ChatGPT%20Image%20Mar%2028,%202026,%2009_54_54%20PM.png?tr=w-1200,q-80,f-auto 1200w"
++                  sizes="(max-width: 768px) 100vw, 50vw"
++                  alt="Lumina - Headless E-commerce Design" 
++                  loading="lazy"
++                />
+               </div>
+               <div className="work-info">
+                 <h3 className="work-title">LUMINA</h3>
+@@ -311,7 +336,13 @@ export default function Home() {
+             </div>
+             <div className="work-card">
+               <div className="work-img">
+-                <img src="https://ik.imagekit.io/ioktbcewp/Nexus%20core%20in%20binary%20hands.png?tr=w-1000,q-80,f-auto" alt="Nexus Core - SaaS Platform UI Design" />
++                <img 
++                  src="https://ik.imagekit.io/ioktbcewp/Nexus%20core%20in%20binary%20hands.png?tr=w-1000,q-80,f-auto" 
++                  srcSet="https://ik.imagekit.io/ioktbcewp/Nexus%20core%20in%20binary%20hands.png?tr=w-400,q-70,f-auto 400w, https://ik.imagekit.io/ioktbcewp/Nexus%20core%20in%20binary%20hands.png?tr=w-800,q-80,f-auto 800w, https://ik.imagekit.io/ioktbcewp/Nexus%20core%20in%20binary%20hands.png?tr=w-1200,q-80,f-auto 1200w"
++                  sizes="(max-width: 768px) 100vw, 50vw"
++                  alt="Nexus Core - SaaS Platform UI Design" 
++                  loading="lazy"
++                />
+               </div>
+               <div className="work-info">
+                 <h3 className="work-title">NEXUS CORE</h3>
+@@ -321,7 +352,13 @@ export default function Home() {
+             </div>
+             <div className="work-card">
+               <div className="work-img">
+-                <img src="https://ik.imagekit.io/ioktbcewp/ChatGPT%20Image%20Mar%2028,%202026,%2009_45_35%20PM.png?tr=w-1000,q-80,f-auto" alt="Synesthesia - Interactive Audio Visualizer" />
++                <img 
++                  src="https://ik.imagekit.io/ioktbcewp/ChatGPT%20Image%20Mar%2028,%202026,%2009_45_35%20PM.png?tr=w-1000,q-80,f-auto" 
++                  srcSet="https://ik.imagekit.io/ioktbcewp/ChatGPT%20Image%20Mar%2028,%202026,%2009_45_35%20PM.png?tr=w-400,q-70,f-auto 400w, https://ik.imagekit.io/ioktbcewp/ChatGPT%20Image%20Mar%2028,%202026,%2009_45_35%20PM.png?tr=w-800,q-80,f-auto 800w, https://ik.imagekit.io/ioktbcewp/ChatGPT%20Image%20Mar%2028,%202026,%2009_45_35%20PM.png?tr=w-1200,q-80,f-auto 1200w"
++                  sizes="(max-width: 768px) 100vw, 50vw"
++                  alt="Synesthesia - Interactive Audio Visualizer" 
++                  loading="lazy"
++                />
+               </div>
+               <div className="work-info">
+                 <h3 className="work-title">SYNESTHESIA</h3>
+diff --git a/src/utils/homeAnimations.js b/src/utils/homeAnimations.js
+index 8e7ed77..b5127c2 100644
+--- a/src/utils/homeAnimations.js
++++ b/src/utils/homeAnimations.js
+@@ -1,8 +1,26 @@
+ import gsap from 'gsap';
+ import { ScrollTrigger } from 'gsap/ScrollTrigger';
+ import { TextPlugin } from 'gsap/TextPlugin';
+-import * as THREE from 'three';
+ import Lenis from '@studio-freight/lenis';
++import {
++  Scene,
++  PerspectiveCamera,
++  WebGLRenderer,
++  BufferGeometry,
++  BufferAttribute,
++  PointsMaterial,
++  Points,
++  AdditiveBlending,
++  IcosahedronGeometry,
++  MeshBasicMaterial,
++  Mesh,
++  Raycaster,
++  Vector2,
++  Vector3,
++  Plane,
++  SphereGeometry,
++  TorusKnotGeometry,
++} from 'three';
+ 
+ let heroRafId, aboutRafId, testimonialsRafId, whyUsRafId, servicesRafId;
+ let isHomeActive = false;
+@@ -142,8 +160,9 @@ export function initHome() {
+ 
+     const heroContent = document.querySelector(".hero-content");
+     const onHeroMove = (e) => {
+-      const x = (e.clientX / window.innerWidth - 0.5) * 40;
+-      const y = (e.clientY / window.innerHeight - 0.5) * 40;
++      if (isMobile) return;
++      const x = (e.clientX / window.innerWidth - 0.5) * 20;
++      const y = (e.clientY / window.innerHeight - 0.5) * 20;
+       gsap.to(heroContent, {
+         x: -x,
+         y: -y,
+@@ -167,15 +186,15 @@ export function initHome() {
+   // --- HERO THREE.JS PARTICLES ---
+   const heroCanvas = document.getElementById("hero-canvas");
+   if (heroCanvas) {
+-    const heroScene = new THREE.Scene();
+-    const heroCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+-    const heroRenderer = new THREE.WebGLRenderer({ canvas: heroCanvas, alpha: true, antialias: true });
++    const heroScene = new Scene();
++    const heroCamera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
++    const heroRenderer = new WebGLRenderer({ canvas: heroCanvas, alpha: true, antialias: true });
+ 
+     heroRenderer.setSize(window.innerWidth, window.innerHeight);
+     heroRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+ 
+     const particleCount = isMobile ? 600 : 3000;
+-    const particlesGeo = new THREE.BufferGeometry();
++    const particlesGeo = new BufferGeometry();
+     const particlesPos = new Float32Array(particleCount * 3);
+     const particlesBasePos = new Float32Array(particleCount * 3);
+ 
+@@ -185,26 +204,26 @@ export function initHome() {
+       particlesBasePos[i] = val;
+     }
+ 
+-    particlesGeo.setAttribute("position", new THREE.BufferAttribute(particlesPos, 3));
+-    particlesGeo.setAttribute("basePosition", new THREE.BufferAttribute(particlesBasePos, 3));
++    particlesGeo.setAttribute("position", new BufferAttribute(particlesPos, 3));
++    particlesGeo.setAttribute("basePosition", new BufferAttribute(particlesBasePos, 3));
+ 
+-    const particleMat = new THREE.PointsMaterial({
++    const particleMat = new PointsMaterial({
+       size: 0.02,
+       color: 0x00e5ff,
+       transparent: true,
+       opacity: 0.6,
+-      blending: THREE.AdditiveBlending
++      blending: AdditiveBlending
+     });
+ 
+-    const particleMesh = new THREE.Points(particlesGeo, particleMat);
++    const particleMesh = new Points(particlesGeo, particleMat);
+     heroScene.add(particleMesh);
+ 
+     const icos = [];
+-    const icoGeo = new THREE.IcosahedronGeometry(Math.random() * 0.5 + 0.5, 0);
+-    const icoMat = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true, transparent: true, opacity: 0.1 });
++    const icoGeo = new IcosahedronGeometry(Math.random() * 0.5 + 0.5, 0);
++    const icoMat = new MeshBasicMaterial({ color: 0xffffff, wireframe: true, transparent: true, opacity: 0.1 });
+ 
+     for(let i=0; i<4; i++) {
+-      const ico = new THREE.Mesh(icoGeo, icoMat);
++      const ico = new Mesh(icoGeo, icoMat);
+       ico.position.set((Math.random() - 0.5) * 10, (Math.random() - 0.5) * 10, (Math.random() - 0.5) * 5);
+       ico.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, 0);
+       ico.userData = { rx: (Math.random() - 0.5) * 0.01, ry: (Math.random() - 0.5) * 0.01 };
+@@ -214,8 +233,8 @@ export function initHome() {
+ 
+     heroCamera.position.z = 5;
+ 
+-    const raycaster = new THREE.Raycaster();
+-    const mouse = new THREE.Vector2();
++    const raycaster = new Raycaster();
++    const mouse = new Vector2();
+ 
+     const onMouse = (event) => {
+       mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+@@ -224,7 +243,7 @@ export function initHome() {
+     window.addEventListener("mousemove", onMouse);
+     if(window._homeScrubbers) window._homeScrubbers.push(() => window.removeEventListener("mousemove", onMouse));
+ 
+-    const clock = new THREE.Clock();
++    const startTime = performance.now();
+     let heroFrameCount = 0;
+     let isHeroVisible = true;
+     observeCanvas(heroCanvas, (v) => isHeroVisible = v);
+@@ -235,7 +254,7 @@ export function initHome() {
+       heroFrameCount++;
+       if (isMobile && heroFrameCount % 2 === 0) return;
+       
+-      const time = clock.getElapsedTime();
++      const time = (performance.now() - startTime) * 0.001;
+       particleMesh.rotation.y = time * 0.05;
+       particleMesh.rotation.x = time * 0.02;
+ 
+@@ -245,8 +264,8 @@ export function initHome() {
+       });
+ 
+       raycaster.setFromCamera(mouse, heroCamera);
+-      const intersectPlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
+-      const intersectPoint = new THREE.Vector3();
++      const intersectPlane = new Plane(new Vector3(0, 0, 1), 0);
++      const intersectPoint = new Vector3();
+       raycaster.ray.intersectPlane(intersectPlane, intersectPoint);
+ 
+       const positions = particleMesh.geometry.attributes.position.array;
+@@ -388,9 +407,9 @@ export function initHome() {
+   // --- ABOUT SECTION ---
+   const aboutCanvas = document.getElementById("about-canvas");
+   if (aboutCanvas) {
+-    const aboutScene = new THREE.Scene();
+-    const aboutCamera = new THREE.PerspectiveCamera(75, 1, 0.1, 100);
+-    const aboutRenderer = new THREE.WebGLRenderer({ canvas: aboutCanvas, alpha: true, antialias: true });
++    const aboutScene = new Scene();
++    const aboutCamera = new PerspectiveCamera(75, 1, 0.1, 100);
++    const aboutRenderer = new WebGLRenderer({ canvas: aboutCanvas, alpha: true, antialias: true });
+     aboutRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+ 
+     const aboutLeft = document.querySelector(".about-left");
+@@ -405,12 +424,12 @@ export function initHome() {
+     if(window._homeScrubbers) window._homeScrubbers.push(() => window.removeEventListener("resize", resizeAbout));
+     resizeAbout();
+ 
+-    let geoSphere = new THREE.SphereGeometry(2, 32, 32);
+-    let geoTorus = new THREE.TorusKnotGeometry(1.5, 0.4, 100, 16);
+-    const matWire = new THREE.MeshBasicMaterial({ color: 0xc8ff00, wireframe: true, transparent: true, opacity: 0 });
++    let geoSphere = new SphereGeometry(2, 32, 32);
++    let geoTorus = new TorusKnotGeometry(1.5, 0.4, 100, 16);
++    const matWire = new MeshBasicMaterial({ color: 0xc8ff00, wireframe: true, transparent: true, opacity: 0 });
+ 
+-    const meshSphere = new THREE.Mesh(geoSphere, matWire.clone());
+-    const meshTorus = new THREE.Mesh(geoTorus, matWire.clone());
++    const meshSphere = new Mesh(geoSphere, matWire.clone());
++    const meshTorus = new Mesh(geoTorus, matWire.clone());
+     meshSphere.material.opacity = 1;
+     meshTorus.material.opacity = 0;
+ 
+@@ -458,16 +477,16 @@ export function initHome() {
+   // --- TESTIMONIALS ---
+   const testimonialsCanvas = document.getElementById("testimonials-canvas");
+   if (testimonialsCanvas) {
+-    const tScene = new THREE.Scene();
+-    const tCamera = new THREE.PerspectiveCamera(75, window.innerWidth / 500, 0.1, 1000);
+-    const tRenderer = new THREE.WebGLRenderer({ canvas: testimonialsCanvas, alpha: true, antialias: true });
++    const tScene = new Scene();
++    const tCamera = new PerspectiveCamera(75, window.innerWidth / 500, 0.1, 1000);
++    const tRenderer = new WebGLRenderer({ canvas: testimonialsCanvas, alpha: true, antialias: true });
+     tRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+     tRenderer.setSize(window.innerWidth, 500);
+     tCamera.position.z = 10;
+ 
+-    const geo = new THREE.SphereGeometry(12, 40, 40);
+-    const mat = new THREE.PointsMaterial({ color: 0x00e5ff, size: 0.08, transparent: true, opacity: 0.4 });
+-    const points = new THREE.Points(geo, mat);
++    const geo = new SphereGeometry(12, 40, 40);
++    const mat = new PointsMaterial({ color: 0x00e5ff, size: 0.08, transparent: true, opacity: 0.4 });
++    const points = new Points(geo, mat);
+     tScene.add(points);
+ 
+     let isTestimonialsVisible = false;
+@@ -566,17 +585,17 @@ export function initHome() {
+   // --- WHY US ---
+   const whyUsCanvas = document.getElementById("why-us-canvas");
+   if (whyUsCanvas) {
+-    const whyUsScene = new THREE.Scene();
+-    const whyUsCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+-    const whyUsRenderer = new THREE.WebGLRenderer({ canvas: whyUsCanvas, alpha: true, antialias: true });
++    const whyUsScene = new Scene();
++    const whyUsCamera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
++    const whyUsRenderer = new WebGLRenderer({ canvas: whyUsCanvas, alpha: true, antialias: true });
+     whyUsRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+ 
+     whyUsRenderer.setSize(window.innerWidth, window.innerHeight);
+     whyUsCamera.position.z = 8;
+ 
+-    const tornadoGeo = new THREE.TorusKnotGeometry(10, 3, 64, 8);
+-    const tornadoMat = new THREE.MeshBasicMaterial({ color: 0xff3cac, wireframe: true, transparent: true, opacity: 0.05 });
+-    const tornado = new THREE.Mesh(tornadoGeo, tornadoMat);
++    const tornadoGeo = new TorusKnotGeometry(10, 3, 64, 8);
++    const tornadoMat = new MeshBasicMaterial({ color: 0xff3cac, wireframe: true, transparent: true, opacity: 0.05 });
++    const tornado = new Mesh(tornadoGeo, tornadoMat);
+     whyUsScene.add(tornado);
+ 
+     let isWhyUsVisible = false;
+@@ -614,14 +633,14 @@ export function initHome() {
+   // --- SERVICES THREE.JS ---
+   const servicesCanvas = document.getElementById("services-canvas");
+   if (servicesCanvas) {
+-    const sScene = new THREE.Scene();
+-    const sCamera = new THREE.PerspectiveCamera(75, window.innerWidth / 400, 0.1, 1000);
+-    const sRenderer = new THREE.WebGLRenderer({ canvas: servicesCanvas, alpha: true, antialias: true });
++    const sScene = new Scene();
++    const sCamera = new PerspectiveCamera(75, window.innerWidth / 400, 0.1, 1000);
++    const sRenderer = new WebGLRenderer({ canvas: servicesCanvas, alpha: true, antialias: true });
+     sRenderer.setSize(window.innerWidth, 400); sCamera.position.z = 5;
+ 
+-    const geo = new THREE.TorusKnotGeometry(10, 3, 100, 16);
+-    const mat = new THREE.MeshBasicMaterial({ color: 0x00e5ff, wireframe: true, transparent: true, opacity: 0.1 });
+-    const knot = new THREE.Mesh(geo, mat);
++    const geo = new TorusKnotGeometry(10, 3, 100, 16);
++    const mat = new MeshBasicMaterial({ color: 0x00e5ff, wireframe: true, transparent: true, opacity: 0.1 });
++    const knot = new Mesh(geo, mat);
+     knot.scale.set(0.15, 0.15, 0.15);
+     sScene.add(knot);
+ 
+diff --git a/style.css b/style.css
+index 12a1992..652bbde 100644
+--- a/style.css
++++ b/style.css
+@@ -12,15 +12,15 @@ canvas { max-width: 100%; display: block; }
+   --accent2:    #ff3cac;      /* hot magenta */
+   --accent3:    #00e5ff;      /* electric cyan */
+   --text:       #f0f0f0;      /* primary text */
+-  --muted:      #4a4a60;      /* secondary text */
++  --muted:      #b3b3d1;      /* increased contrast for AA compliance */
+   --border:     #1e1e2e;      /* subtle borders */
+ 
+   /* Typography Scale */
+-  --fs-hero:    clamp(32px, 8vw, 160px);
++  --fs-hero:    clamp(32px, 7.5vw, 120px);
+   --fs-h2:      clamp(24px, 5vw, 80px);
+   --fs-h3:      clamp(16px, 3.5vw, 40px);
+   --fs-body:    clamp(14px, 1.8vw, 18px);
+-  --fs-mono:    clamp(10px, 1.1vw, 14px);
++  --fs-mono:    clamp(12px, 1.1vw, 15px);
+ 
+   --font-display: 'Syne', sans-serif;
+   --font-mono: 'Space Mono', monospace;
+@@ -56,8 +56,16 @@ body {
+ a, button, input, textarea {
+   font-family: inherit;
+   cursor: none;
++  outline: none;
++}
++
++/* Accessible focus states for keyboard users */
++a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
++  outline: 2px solid var(--accent);
++  outline-offset: 4px;
+ }
+ 
++
+ .cta-link-react {
+   display: inline-flex;
+   align-items: center;
+@@ -169,6 +177,25 @@ body::after {
+   background: var(--accent);
+ }
+ 
++/* PAGE LOADER MINI (for dynamic imports) */
++.page-loader-mini {
++  position: fixed;
++  top: 0; left: 0;
++  width: 100%; height: 2px;
++  z-index: 99999;
++  background: rgba(200, 255, 0, 0.1);
++}
++.page-loader-mini .loader-bar {
++  height: 100%;
++  width: 50%;
++  background: var(--accent);
++  animation: mini-loader 1s infinite ease-in-out;
++}
++@keyframes mini-loader {
++  0% { transform: translateX(-100%); }
++  100% { transform: translateX(200%); }
++}
++
+ /* PAGE TRANSITION OVERLAY */
+ .page-transition {
+   position: fixed;
+@@ -287,10 +314,12 @@ body::after {
+   width: 100%;
+   height: 100vh;
+   display: flex;
+-  align-items: center;
++  align-items: flex-start;
+   justify-content: center;
+   overflow: hidden;
+   z-index: 1;
++  /* Push content below the fixed header so mono-text (EST.) is always visible */
++  padding-top: clamp(130px, 18vh, 180px);
+ }
+ #hero-canvas {
+   position: absolute;
+@@ -304,9 +333,10 @@ body::after {
+ .hero-content {
+   position: relative;
+   z-index: 10;
+-  width: 90%;
++  width: 100%;
+   max-width: 1400px;
+-  /* mix-blend-mode: difference; */ /* Removed to ensure visibility on all bg states */
++  padding: 0 5%;
++  margin: 0 auto;
+ }
+ .hero-mono-text {
+   font-family: var(--font-mono);
+@@ -314,6 +344,7 @@ body::after {
+   color: var(--text);
+   margin-bottom: 2rem;
+   letter-spacing: 0.1em;
++  white-space: nowrap;
+ }
+ .hero-headline {
+   font-size: var(--fs-hero);
+@@ -335,12 +366,12 @@ body::after {
+   width: 100%;
+   max-width: 400px;
+   background: var(--accent);
+-  margin: 2rem 0;
++  margin: 1rem 0;
+   transform: scaleX(0);
+   transform-origin: left;
+ }
+ .hero-body-text {
+-  font-size: var(--fs-h3);
++  font-size: clamp(16px, 3.5vw, 28px);
+   color: var(--text);
+   max-width: 600px;
+   margin-left: auto;
+@@ -985,9 +1016,9 @@ body::after {
+   }
+   .nav-logo { 
+     font-size: 1.2rem; 
+-    width: 100%; 
+-    text-align: center; 
+-    margin-bottom: 0.8rem; 
++    width: auto; 
++    text-align: left; 
++    margin-bottom: 0; 
+   }
+   .hamburger-menu {
+     display: flex !important;
+diff --git a/vercel.json b/vercel.json
+index 97490f7..a44bb77 100644
+--- a/vercel.json
++++ b/vercel.json
+@@ -6,6 +6,39 @@
+     }
+   ],
+   "headers": [
++    {
++      "source": "/(.*)",
++      "headers": [
++        {
++          "key": "Content-Security-Policy",
++          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://*; connect-src 'self' https://*; frame-ancestors 'none'; object-src 'none'; base-uri 'self';"
++        },
++        {
++          "key": "Cross-Origin-Opener-Policy",
++          "value": "same-origin"
++        },
++        {
++          "key": "X-Frame-Options",
++          "value": "DENY"
++        },
++        {
++          "key": "X-Content-Type-Options",
++          "value": "nosniff"
++        },
++        {
++          "key": "Referrer-Policy",
++          "value": "strict-origin-when-cross-origin"
++        },
++        {
++          "key": "Strict-Transport-Security",
++          "value": "max-age=31536000; includeSubDomains; preload"
++        },
++        {
++          "key": "Permissions-Policy",
++          "value": "camera=(), microphone=(), geolocation=()"
++        }
++      ]
++    },
+     {
+       "source": "/assets/(.*)",
+       "headers": [
+diff --git a/vite.config.js b/vite.config.js
+index 79f682e..ea14302 100644
+--- a/vite.config.js
++++ b/vite.config.js
+@@ -9,13 +9,17 @@ export default defineConfig({
+         manualChunks(id) {
+           if (id.includes('node_modules')) {
+             if (id.includes('three')) return 'three';
++            if (id.includes('@react-three')) return 'react-three';
+             if (id.includes('gsap')) return 'gsap';
+-            if (id.includes('react')) return 'react-vendor';
++            if (id.includes('react-router') || id.includes('react-dom') || id.includes('react-helmet')) return 'react-core';
+             return 'vendor';
+           }
+         }
+       }
+     },
+-    chunkSizeWarningLimit: 1000
++    chunkSizeWarningLimit: 1200,
++    assetsInlineLimit: 4096, // Inline small assets
++    minify: 'esbuild',
++    reportCompressedSize: true
+   }
+ });

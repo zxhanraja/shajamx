@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react';
 import compression from 'vite-plugin-compression';
 
 export default defineConfig({
+  base: './',
   plugins: [
     react(),
     compression({ algorithm: 'gzip' })
@@ -11,6 +12,8 @@ export default defineConfig({
     exclude: ['three']
   },
   build: {
+    outDir: 'dist',
+    emptyOutDir: true,
     rollupOptions: {
       output: {
         manualChunks(id) {
@@ -23,7 +26,7 @@ export default defineConfig({
         }
       }
     },
-    chunkSizeWarningLimit: 1200,
+    chunkSizeWarningLimit: 1500,
     assetsInlineLimit: 8192,
     minify: 'esbuild',
     cssMinify: true,

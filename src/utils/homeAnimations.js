@@ -1,7 +1,7 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { TextPlugin } from 'gsap/TextPlugin';
-import Lenis from '@studio-freight/lenis';
+import Lenis from 'lenis';
 
 // Dynamic import placeholders for THREE
 let THREE_CORE = null;

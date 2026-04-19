@@ -23,7 +23,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { TextPlugin } from 'gsap/TextPlugin';
 import { Draggable } from 'gsap/Draggable';
-import Lenis from '@studio-freight/lenis';
+import Lenis from 'lenis';
 import { initPreloader } from './utils/homeAnimations.js';
 
 gsap.registerPlugin(ScrollTrigger, TextPlugin, Draggable);

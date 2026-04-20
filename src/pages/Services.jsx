@@ -426,7 +426,14 @@ function Services() {
             letter-spacing: 1px;
             border-bottom: 1px solid rgba(255,255,255,0.06);
           }
-          .comp-table th:first-child { text-align: left; }
+          .comp-table th:first-child { 
+            text-align: left; 
+            position: sticky;
+            left: 0;
+            background: #07070a; 
+            z-index: 10;
+            border-right: 1px solid rgba(255,255,255,0.06);
+          }
           .comp-table td {
             padding: 0.9rem 1rem;
             text-align: center;
@@ -437,9 +444,17 @@ function Services() {
             text-align: left;
             color: #e0e0f0;
             font-weight: 600;
+            position: sticky;
+            left: 0;
+            background: #07070a;
+            z-index: 5;
+            border-right: 1px solid rgba(255,255,255,0.04);
           }
           .comp-table tr:hover td {
             background: rgba(255,255,255,0.02);
+          }
+          .comp-table tr:hover td:first-child {
+            background: #0a0a0d; /* slightly lighter on hover for sticky col */
           }
           .ct-check { color: #c8ff00; font-weight: 800; font-size: 1rem; }
           .ct-dash  { color: rgba(255,255,255,0.15); }
@@ -449,29 +464,6 @@ function Services() {
             grid-template-columns: 1fr;
             gap: 1.5rem;
           }
-          .mobile-swipe-hint {
-            display: none;
-          }
-          @media (max-width: 768px) {
-            .mobile-swipe-hint {
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              gap: 0.5rem;
-              color: #a0a0b0;
-              font-family: 'Space Mono', monospace;
-              font-size: 0.75rem;
-              margin-top: 1.5rem;
-              opacity: 0.8;
-              animation: hintPulse 2s infinite ease-in-out;
-            }
-            @keyframes hintPulse {
-              0%, 100% { opacity: 0.4; transform: translateX(0); }
-              50% { opacity: 1; transform: translateX(5px); }
-            }
-            .comp-table-wrap {
-              border-right: 2px solid rgba(0, 229, 255, 0.3); /* Visual hint on the right edge */
-            }
           }
           @media (min-width: 768px) {
             .tiers-grid-new { grid-template-columns: repeat(2, 1fr); }
@@ -628,13 +620,9 @@ function Services() {
 
           {/* FEATURE COMPARISON TABLE */}
           <div style={{ marginTop: '8rem' }}>
-            <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
+            <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
               <h2 className="section-title" style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)', letterSpacing: '-0.02em', margin: 0 }}>FEATURE COMPARISON</h2>
-              <p style={{ color: '#4a4a60', fontSize: '1rem', marginTop: '1rem', fontFamily: 'Space Mono, monospace' }}>What's in each plan?</p>
-              <div className="mobile-swipe-hint">
-                <span>Swipe to compare</span>
-                <span>→</span>
-              </div>
+              <p style={{ color: '#4a4a60', fontSize: '1rem', marginTop: '1rem', fontFamily: 'Space Mono, monospace' }}>← scroll table → feature column stays fixed</p>
             </div>
             <div className="comp-table-wrap">
               <table className="comp-table">
@@ -642,8 +630,8 @@ function Services() {
                   <tr>
                     <th style={{ color: '#4a4a60', width: '28%' }}>FEATURE</th>
                     <th style={{ color: '#00e5ff' }}>STARTER</th>
-                    <th style={{ color: '#ff3cac' }}>GROWTH</th>
-                    <th className="ct-popular-col" style={{ color: '#c8ff00' }}>PROFESSIONAL</th>
+                    <th style={{ color: '#ff3cac' }}>GROW</th>
+                    <th className="ct-popular-col" style={{ color: '#c8ff00' }}>PRO</th>
                     <th style={{ color: '#bc13fe' }}>ENTERPRISE</th>
                   </tr>
                 </thead>

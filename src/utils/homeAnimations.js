@@ -93,7 +93,7 @@ export async function initHome() {
   // Batch DOM reads for layout to prevent forced reflows
   let winW = window.innerWidth;
   let winH = window.innerHeight;
-  let dpr = Math.min(window.devicePixelRatio, 1.5);
+  let dpr = isMobile ? 1 : Math.min(window.devicePixelRatio, 1.2);
 
   // Mobile-specific ScrollTrigger optimizations
   if (isMobile) {
@@ -287,8 +287,6 @@ export async function initHome() {
         state.rafs.hero = requestAnimationFrame(animateHero);
         if (!isHeroVisible) return;
         heroFrameCount++;
-        if (isMobile && heroFrameCount % 2 === 0) return;
-
         const time = (performance.now() - startTime) * 0.001;
         particleMesh.rotation.y = time * 0.05;
         particleMesh.rotation.x = time * 0.02;
@@ -298,38 +296,41 @@ export async function initHome() {
           ico.rotation.y += ico.userData.ry;
         });
 
-        raycaster.setFromCamera(mouse, heroCamera);
-        const intersectPlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
-        const intersectPoint = new THREE.Vector3();
-        raycaster.ray.intersectPlane(intersectPlane, intersectPoint);
+        // Skip intensive CPU raycasting and math loops on mobile device for buttery performance
+        if (!isMobile) {
+          raycaster.setFromCamera(mouse, heroCamera);
+          const intersectPlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
+          const intersectPoint = new THREE.Vector3();
+          raycaster.ray.intersectPlane(intersectPlane, intersectPoint);
 
-        const positions = particleMesh.geometry.attributes.position.array;
-        const basePositions = particleMesh.geometry.attributes.basePosition.array;
+          const positions = particleMesh.geometry.attributes.position.array;
+          const basePositions = particleMesh.geometry.attributes.basePosition.array;
 
-        const localIntersect = intersectPoint.clone();
-        particleMesh.worldToLocal(localIntersect);
+          const localIntersect = intersectPoint.clone();
+          particleMesh.worldToLocal(localIntersect);
 
-        for (let i = 0; i < particleCount; i++) {
-          const ix = i * 3, iy = i * 3 + 1, iz = i * 3 + 2;
+          for (let i = 0; i < particleCount; i++) {
+            const ix = i * 3, iy = i * 3 + 1, iz = i * 3 + 2;
 
-          const dx = positions[ix] - localIntersect.x;
-          const dy = positions[iy] - localIntersect.y;
-          const dz = positions[iz] - localIntersect.z;
-          const d2 = dx * dx + dy * dy + dz * dz;
+            const dx = positions[ix] - localIntersect.x;
+            const dy = positions[iy] - localIntersect.y;
+            const dz = positions[iz] - localIntersect.z;
+            const d2 = dx * dx + dy * dy + dz * dz;
 
-          if (d2 < 2.0) {
-            const force = (2.0 - d2) * 0.02;
-            positions[ix] += dx * force;
-            positions[iy] += dy * force;
-            positions[iz] += dz * force;
-          } else {
-            positions[ix] += (basePositions[ix] - positions[ix]) * 0.08;
-            positions[iy] += (basePositions[iy] - positions[iy]) * 0.08;
-            positions[iz] += (basePositions[iz] - positions[iz]) * 0.08;
+            if (d2 < 2.0) {
+              const force = (2.0 - d2) * 0.02;
+              positions[ix] += dx * force;
+              positions[iy] += dy * force;
+              positions[iz] += dz * force;
+            } else {
+              positions[ix] += (basePositions[ix] - positions[ix]) * 0.08;
+              positions[iy] += (basePositions[iy] - positions[iy]) * 0.08;
+              positions[iz] += (basePositions[iz] - positions[iz]) * 0.08;
+            }
           }
-        }
 
-        particleMesh.geometry.attributes.position.needsUpdate = true;
+          particleMesh.geometry.attributes.position.needsUpdate = true;
+        }
         heroRenderer.render(heroScene, heroCamera);
       }
       animateHero();

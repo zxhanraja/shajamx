@@ -53,10 +53,12 @@ function GlobalSetup() {
     // Initialize Global Lenis Smooth Scroll with RESPONSIVE settings
     if (!window.lenis) {
       const lenis = new Lenis({
-        lerp: 0.1, // Increased from 0.04 for more responsiveness (snappier feel)
+        lerp: 0.06, // Lower for buttery smooth feel
         smoothWheel: true,
+        smoothTouch: true, // Smooth scroll on touch devices
+        syncTouch: true, // Syncs touch scroll with Lenis interpolation
         wheelMultiplier: 1.0, 
-        touchMultiplier: 1.5,
+        touchMultiplier: 1.8,
       });
       window.lenis = lenis;
 

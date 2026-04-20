@@ -454,7 +454,7 @@ function Services() {
             background: rgba(255,255,255,0.02);
           }
           .comp-table tr:hover td:first-child {
-            background: #0a0a0d; /* slightly lighter on hover for sticky col */
+            background: #0a0a0d;
           }
           .ct-check { color: #c8ff00; font-weight: 800; font-size: 1rem; }
           .ct-dash  { color: rgba(255,255,255,0.15); }
@@ -463,6 +463,19 @@ function Services() {
             display: grid;
             grid-template-columns: 1fr;
             gap: 1.5rem;
+          }
+          .desktop-comp-table { display: block; }
+          .mobile-comp-cards { display: none; }
+          @media (max-width: 768px) {
+            .desktop-comp-table { display: none; }
+            .mobile-comp-cards { display: flex; flex-direction: column; gap: 1rem; padding: 0 5vw; }
+            .mf-card { background: #0a0a0d; border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 1.2rem; }
+            .mf-title { color: #fff; font-weight: 800; font-size: 1.1rem; margin-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.8rem; text-align: center; }
+            .mf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+            .mf-item { display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.9rem; background: rgba(255,255,255,0.02); padding: 0.8rem; border-radius: 10px; text-align: center; min-height: 70px; }
+            .mf-item span.mf-lbl { font-family: 'Space Mono', monospace; font-size: 0.65rem; color: #505060; text-transform: uppercase; margin-bottom: 0.4rem; letter-spacing: 1px; }
+            .mf-item.mf-popular { background: rgba(200,255,0,0.05); border: 1px solid rgba(200,255,0,0.2); }
+            .mf-item.mf-popular span.mf-lbl { color: #c8ff00; opacity: 0.8; }
           }
           }
           @media (min-width: 768px) {
@@ -622,47 +635,93 @@ function Services() {
           <div style={{ marginTop: '8rem' }}>
             <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
               <h2 className="section-title" style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)', letterSpacing: '-0.02em', margin: 0 }}>FEATURE COMPARISON</h2>
-              <p style={{ color: '#4a4a60', fontSize: '1rem', marginTop: '1rem', fontFamily: 'Space Mono, monospace' }}>← scroll table → feature column stays fixed</p>
             </div>
-            <div className="comp-table-wrap">
-              <table className="comp-table">
-                <thead>
-                  <tr>
-                    <th style={{ color: '#4a4a60', width: '28%' }}>FEATURE</th>
-                    <th style={{ color: '#00e5ff' }}>STARTER</th>
-                    <th style={{ color: '#ff3cac' }}>GROW</th>
-                    <th className="ct-popular-col" style={{ color: '#c8ff00' }}>PRO</th>
-                    <th style={{ color: '#bc13fe' }}>ENTERPRISE</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {[
-                    ['Pages',                   '10',    '20',    '30',        'Up to 50'],
-                    ['Blog Articles',            '—',     '5',     '15',        '25'],
-                    ['Logo Design',              '—',     '✓',     '✓',         '✓'],
-                    ['Local SEO + GMB',          '—',     '✓',     '✓',         '✓'],
-                    ['Multi-City SEO Pages',     '—',     '—',     '✓',         '✓'],
-                    ['Competitor Research',      '—',     '—',     '✓',         '✓'],
-                    ['Product/Service Gallery',  '—',     '—',     '✓',         '✓'],
-                    ['City × Industry Pages',    '—',     '—',     '—',         '✓'],
-                    ['Hindi + English',          '—',     '—',     '—',         '✓'],
-                    ['Custom Animations',        '—',     '—',     '—',         '✓'],
-                    ['WhatsApp Business Setup',  '—',     '—',     '—',         '✓'],
-                    ['Revisions',                '1',     '3',     '5',         'Unlimited'],
-                    ['Post-Launch Support',      '—',     '1 mo',  '3 mo',      '6 mo'],
-                    ['SEO Reports',              '—',     '—',     '3 mo',      '12 mo'],
-                    ['Delivery',                 '1–5 d', '1–3 d', 'Priority',  'Dedicated PM'],
-                  ].map(([feature, s, g, p, e], i) => (
-                    <tr key={i}>
-                      <td>{feature}</td>
-                      <td>{s === '✓' ? <span className="ct-check">✓</span> : s === '—' ? <span className="ct-dash">—</span> : <span style={{ color: '#e0e0f0' }}>{s}</span>}</td>
-                      <td>{g === '✓' ? <span className="ct-check">✓</span> : g === '—' ? <span className="ct-dash">—</span> : <span style={{ color: '#e0e0f0' }}>{g}</span>}</td>
-                      <td className="ct-popular-col">{p === '✓' ? <span className="ct-check">✓</span> : p === '—' ? <span className="ct-dash">—</span> : <span style={{ color: '#c8ff00', fontWeight: 700 }}>{p}</span>}</td>
-                      <td>{e === '✓' ? <span className="ct-check">✓</span> : e === '—' ? <span className="ct-dash">—</span> : <span style={{ color: '#e0e0f0' }}>{e}</span>}</td>
+            
+            <div className="desktop-comp-table">
+              <p style={{ color: '#4a4a60', fontSize: '1rem', marginTop: '1rem', fontFamily: 'Space Mono, monospace', textAlign: 'center', marginBottom: '2rem' }}>← scroll table → feature column stays fixed</p>
+              <div className="comp-table-wrap">
+                <table className="comp-table">
+                  <thead>
+                    <tr>
+                      <th style={{ color: '#4a4a60', width: '28%' }}>FEATURE</th>
+                      <th style={{ color: '#00e5ff' }}>STARTER</th>
+                      <th style={{ color: '#ff3cac' }}>GROW</th>
+                      <th className="ct-popular-col" style={{ color: '#c8ff00' }}>PRO</th>
+                      <th style={{ color: '#bc13fe' }}>ENTERPRISE</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {[
+                      ['Pages',                   '10',    '20',    '30',        'Up to 50'],
+                      ['Blog Articles',            '—',     '5',     '15',        '25'],
+                      ['Logo Design',              '—',     '✓',     '✓',         '✓'],
+                      ['Local SEO + GMB',          '—',     '✓',     '✓',         '✓'],
+                      ['Multi-City SEO Pages',     '—',     '—',     '✓',         '✓'],
+                      ['Competitor Research',      '—',     '—',     '✓',         '✓'],
+                      ['Product/Service Gallery',  '—',     '—',     '✓',         '✓'],
+                      ['City × Industry Pages',    '—',     '—',     '—',         '✓'],
+                      ['Hindi + English',          '—',     '—',     '—',         '✓'],
+                      ['Custom Animations',        '—',     '—',     '—',         '✓'],
+                      ['WhatsApp Business Setup',  '—',     '—',     '—',         '✓'],
+                      ['Revisions',                '1',     '3',     '5',         'Unlimited'],
+                      ['Post-Launch Support',      '—',     '1 mo',  '3 mo',      '6 mo'],
+                      ['SEO Reports',              '—',     '—',     '3 mo',      '12 mo'],
+                      ['Delivery',                 '1–5 d', '1–3 d', 'Priority',  'Dedicated PM'],
+                    ].map(([feature, s, g, p, e], i) => (
+                      <tr key={i}>
+                        <td>{feature}</td>
+                        <td>{s === '✓' ? <span className="ct-check">✓</span> : s === '—' ? <span className="ct-dash">—</span> : <span style={{ color: '#e0e0f0' }}>{s}</span>}</td>
+                        <td>{g === '✓' ? <span className="ct-check">✓</span> : g === '—' ? <span className="ct-dash">—</span> : <span style={{ color: '#e0e0f0' }}>{g}</span>}</td>
+                        <td className="ct-popular-col">{p === '✓' ? <span className="ct-check">✓</span> : p === '—' ? <span className="ct-dash">—</span> : <span style={{ color: '#c8ff00', fontWeight: 700 }}>{p}</span>}</td>
+                        <td>{e === '✓' ? <span className="ct-check">✓</span> : e === '—' ? <span className="ct-dash">—</span> : <span style={{ color: '#e0e0f0' }}>{e}</span>}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Mobile Feature Cards (NO SWIPE) */}
+            <div className="mobile-comp-cards">
+              {[
+                ['Pages',                   '10',    '20',    '30',        'Up to 50'],
+                ['Blog Articles',            '—',     '5',     '15',        '25'],
+                ['Logo Design',              '—',     '✓',     '✓',         '✓'],
+                ['Local SEO + GMB',          '—',     '✓',     '✓',         '✓'],
+                ['Multi-City SEO Pages',     '—',     '—',     '✓',         '✓'],
+                ['Competitor Research',      '—',     '—',     '✓',         '✓'],
+                ['Product/Service Gallery',  '—',     '—',     '✓',         '✓'],
+                ['City × Industry Pages',    '—',     '—',     '—',         '✓'],
+                ['Hindi + English',          '—',     '—',     '—',         '✓'],
+                ['Custom Animations',        '—',     '—',     '—',         '✓'],
+                ['WhatsApp Business Setup',  '—',     '—',     '—',         '✓'],
+                ['Revisions',                '1',     '3',     '5',         'Unlimited'],
+                ['Post-Launch Support',      '—',     '1 mo',  '3 mo',      '6 mo'],
+                ['SEO Reports',              '—',     '—',     '3 mo',      '12 mo'],
+                ['Delivery',                 '1–5 d', '1–3 d', 'Priority',  'Dedicated PM'],
+              ].map(([feature, s, g, p, e], i) => (
+                <div key={i} className="mf-card">
+                  <div className="mf-title">{feature}</div>
+                  <div className="mf-grid">
+                    <div className="mf-item">
+                      <span className="mf-lbl">Starter</span>
+                      <div style={{ color: '#00e5ff' }}>{s === '✓' ? <span className="ct-check">✓</span> : s === '—' ? <span className="ct-dash">—</span> : s}</div>
+                    </div>
+                    <div className="mf-item">
+                      <span className="mf-lbl">Grow</span>
+                      <div style={{ color: '#ff3cac' }}>{g === '✓' ? <span className="ct-check">✓</span> : g === '—' ? <span className="ct-dash">—</span> : g}</div>
+                    </div>
+                    <div className="mf-item mf-popular">
+                      <span className="mf-lbl">Pro</span>
+                      <div style={{ color: '#c8ff00', fontWeight: 'bold' }}>{p === '✓' ? <span className="ct-check">✓</span> : p === '—' ? <span className="ct-dash">—</span> : p}</div>
+                    </div>
+                    <div className="mf-item">
+                      <span className="mf-lbl">Enterprise</span>
+                      <div style={{ color: '#bc13fe' }}>{e === '✓' ? <span className="ct-check">✓</span> : e === '—' ? <span className="ct-dash">—</span> : e}</div>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>

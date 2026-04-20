@@ -449,6 +449,30 @@ function Services() {
             grid-template-columns: 1fr;
             gap: 1.5rem;
           }
+          .mobile-swipe-hint {
+            display: none;
+          }
+          @media (max-width: 768px) {
+            .mobile-swipe-hint {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              gap: 0.5rem;
+              color: #a0a0b0;
+              font-family: 'Space Mono', monospace;
+              font-size: 0.75rem;
+              margin-top: 1.5rem;
+              opacity: 0.8;
+              animation: hintPulse 2s infinite ease-in-out;
+            }
+            @keyframes hintPulse {
+              0%, 100% { opacity: 0.4; transform: translateX(0); }
+              50% { opacity: 1; transform: translateX(5px); }
+            }
+            .comp-table-wrap {
+              border-right: 2px solid rgba(0, 229, 255, 0.3); /* Visual hint on the right edge */
+            }
+          }
           @media (min-width: 768px) {
             .tiers-grid-new { grid-template-columns: repeat(2, 1fr); }
           }
@@ -607,6 +631,10 @@ function Services() {
             <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
               <h2 className="section-title" style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)', letterSpacing: '-0.02em', margin: 0 }}>FEATURE COMPARISON</h2>
               <p style={{ color: '#4a4a60', fontSize: '1rem', marginTop: '1rem', fontFamily: 'Space Mono, monospace' }}>What's in each plan?</p>
+              <div className="mobile-swipe-hint">
+                <span>Swipe to compare</span>
+                <span>→</span>
+              </div>
             </div>
             <div className="comp-table-wrap">
               <table className="comp-table">

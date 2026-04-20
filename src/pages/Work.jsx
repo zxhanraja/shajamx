@@ -67,7 +67,7 @@ function Work() {
       {/* Hero */}
       <section style={{ padding: '15vmax 5% 5vmax', textAlign: 'center', position: 'relative' }}>
         <div style={{ overflow: 'hidden' }}>
-          <h1 className="hero-headline react-hero-title" style={{ fontSize: 'clamp(2.5rem, 8vw, 8rem)', letterSpacing: '-0.02em', margin: 0 }}>PORTFOLIO</h1>
+          <h1 className="hero-headline react-hero-title" style={{ fontSize: 'clamp(1.8rem, 11vw, 8rem)', letterSpacing: '-0.02em', margin: 0 }}>PORTFOLIO</h1>
         </div>
         <p className="react-hero-subtext" style={{ fontSize: 'clamp(1rem, 2vw, 1.5rem)', color: '#f0f0f0', maxWidth: '800px', margin: '1rem auto' }}>
           Premium 3D digital worlds engineered for brands in Kolkata, Mumbai, and beyond.

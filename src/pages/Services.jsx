@@ -397,10 +397,20 @@ function Services() {
           .comp-table-wrap {
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
+            padding-bottom: 1.5rem;
+            margin: 0 -5vw;
+            padding: 0 5vw;
           }
           .comp-table-wrap::-webkit-scrollbar {
-            display: none;
+            height: 6px;
+          }
+          .comp-table-wrap::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+          }
+          .comp-table-wrap::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
           }
           .comp-table {
             width: 100%;

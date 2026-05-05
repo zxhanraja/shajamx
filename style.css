@@ -1411,13 +1411,17 @@ body::after {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-top: 1px solid rgba(255,255,255,0.1);
-  padding: 1.5rem 0;
+  padding: 2rem 5%;
+  border-top: 1px solid var(--border);
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   color: var(--muted);
-  flex-wrap: wrap;
   gap: 1rem;
+  flex-wrap: wrap;
+}
+.footer-bottom-link:hover {
+  color: var(--accent) !important;
+  text-decoration: underline !important;
 }
 .footer-ticker-container {
   width: 100%;

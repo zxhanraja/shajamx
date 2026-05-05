@@ -1,7 +1,7 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { TextPlugin } from 'gsap/TextPlugin';
-import Lenis from 'lenis';
+import Lenis from '@studio-freight/lenis';
 
 // Dynamic import placeholders for THREE
 let THREE_CORE = null;
@@ -63,22 +63,22 @@ export function initPreloader() {
 
   tlPreload.to("#preloader-bar", {
     width: "100%",
-    duration: 2.5,
-    ease: "power2.inOut"
+    duration: 1.2, // Faster bar for snappier feel
+    ease: "power2.out"
   }, 0);
 
   tlPreload.to(".preloader-content", {
     opacity: 0,
-    duration: 0.5,
+    duration: 0.3,
     ease: "power2.in"
   });
 
   tlPreload.to(".preloader-overlay", {
     scaleY: 0,
     transformOrigin: "center center",
-    duration: 1,
-    ease: "expo.out"
-  });
+    duration: 0.6, // Faster overlay opening
+    ease: "expo.inOut"
+  }, "-=0.1");
 }
 
 let isMobile = false;
@@ -93,7 +93,7 @@ export async function initHome() {
   // Batch DOM reads for layout to prevent forced reflows
   let winW = window.innerWidth;
   let winH = window.innerHeight;
-  let dpr = isMobile ? 1 : Math.min(window.devicePixelRatio, 1.2);
+  let dpr = Math.min(window.devicePixelRatio, 1.5);
 
   // Mobile-specific ScrollTrigger optimizations
   if (isMobile) {
@@ -113,8 +113,8 @@ export async function initHome() {
     listeners: []
   };
 
-  // Pre-load Three.js for immersive sections
-  const THREE = await loadThree();
+  // Start loading Three.js for immersive sections in the background
+  const threePromise = loadThree();
 
   state.context = gsap.context(() => {
 
@@ -215,8 +215,9 @@ export async function initHome() {
     }
 
     // --- HERO THREE.JS PARTICLES ---
-    const heroCanvas = document.getElementById("hero-canvas");
-    if (heroCanvas) {
+    threePromise.then(THREE => {
+      const heroCanvas = document.getElementById("hero-canvas");
+      if (heroCanvas) {
       const heroScene = new THREE.Scene();
       const heroCamera = new THREE.PerspectiveCamera(75, winW / winH, 0.1, 1000);
       const heroRenderer = new THREE.WebGLRenderer({
@@ -287,6 +288,8 @@ export async function initHome() {
         state.rafs.hero = requestAnimationFrame(animateHero);
         if (!isHeroVisible) return;
         heroFrameCount++;
+        if (isMobile && heroFrameCount % 2 === 0) return;
+
         const time = (performance.now() - startTime) * 0.001;
         particleMesh.rotation.y = time * 0.05;
         particleMesh.rotation.x = time * 0.02;
@@ -296,41 +299,38 @@ export async function initHome() {
           ico.rotation.y += ico.userData.ry;
         });
 
-        // Skip intensive CPU raycasting and math loops on mobile device for buttery performance
-        if (!isMobile) {
-          raycaster.setFromCamera(mouse, heroCamera);
-          const intersectPlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
-          const intersectPoint = new THREE.Vector3();
-          raycaster.ray.intersectPlane(intersectPlane, intersectPoint);
+        raycaster.setFromCamera(mouse, heroCamera);
+        const intersectPlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
+        const intersectPoint = new THREE.Vector3();
+        raycaster.ray.intersectPlane(intersectPlane, intersectPoint);
 
-          const positions = particleMesh.geometry.attributes.position.array;
-          const basePositions = particleMesh.geometry.attributes.basePosition.array;
+        const positions = particleMesh.geometry.attributes.position.array;
+        const basePositions = particleMesh.geometry.attributes.basePosition.array;
 
-          const localIntersect = intersectPoint.clone();
-          particleMesh.worldToLocal(localIntersect);
+        const localIntersect = intersectPoint.clone();
+        particleMesh.worldToLocal(localIntersect);
 
-          for (let i = 0; i < particleCount; i++) {
-            const ix = i * 3, iy = i * 3 + 1, iz = i * 3 + 2;
+        for (let i = 0; i < particleCount; i++) {
+          const ix = i * 3, iy = i * 3 + 1, iz = i * 3 + 2;
 
-            const dx = positions[ix] - localIntersect.x;
-            const dy = positions[iy] - localIntersect.y;
-            const dz = positions[iz] - localIntersect.z;
-            const d2 = dx * dx + dy * dy + dz * dz;
+          const dx = positions[ix] - localIntersect.x;
+          const dy = positions[iy] - localIntersect.y;
+          const dz = positions[iz] - localIntersect.z;
+          const d2 = dx * dx + dy * dy + dz * dz;
 
-            if (d2 < 2.0) {
-              const force = (2.0 - d2) * 0.02;
-              positions[ix] += dx * force;
-              positions[iy] += dy * force;
-              positions[iz] += dz * force;
-            } else {
-              positions[ix] += (basePositions[ix] - positions[ix]) * 0.08;
-              positions[iy] += (basePositions[iy] - positions[iy]) * 0.08;
-              positions[iz] += (basePositions[iz] - positions[iz]) * 0.08;
-            }
+          if (d2 < 2.0) {
+            const force = (2.0 - d2) * 0.02;
+            positions[ix] += dx * force;
+            positions[iy] += dy * force;
+            positions[iz] += dz * force;
+          } else {
+            positions[ix] += (basePositions[ix] - positions[ix]) * 0.08;
+            positions[iy] += (basePositions[iy] - positions[iy]) * 0.08;
+            positions[iz] += (basePositions[iz] - positions[iz]) * 0.08;
           }
-
-          particleMesh.geometry.attributes.position.needsUpdate = true;
         }
+
+        particleMesh.geometry.attributes.position.needsUpdate = true;
         heroRenderer.render(heroScene, heroCamera);
       }
       animateHero();
@@ -346,7 +346,8 @@ export async function initHome() {
       };
       window.addEventListener("resize", onResize);
       state.listeners.push(() => window.removeEventListener("resize", onResize));
-    }
+      }
+    });
 
     // --- MARQUEE ---
     gsap.to(".row-1 .marquee-inner", { xPercent: -50, ease: "none", duration: isMobile ? 30 : 10, repeat: -1 });
@@ -441,130 +442,134 @@ export async function initHome() {
     });
 
     // --- ABOUT SECTION ---
-    const aboutCanvas = document.getElementById("about-canvas");
-    if (aboutCanvas) {
-      const aboutScene = new THREE.Scene();
-      const aboutCamera = new THREE.PerspectiveCamera(75, 1, 0.1, 100);
-      const aboutRenderer = new THREE.WebGLRenderer({
-        canvas: aboutCanvas,
-        alpha: true,
-        antialias: dpr === 1
-      });
-      aboutRenderer.setPixelRatio(Math.min(dpr, 1.2));
+    threePromise.then(THREE => {
+      const aboutCanvas = document.getElementById("about-canvas");
+      if (aboutCanvas) {
+        const aboutScene = new THREE.Scene();
+        const aboutCamera = new THREE.PerspectiveCamera(75, 1, 0.1, 100);
+        const aboutRenderer = new THREE.WebGLRenderer({
+          canvas: aboutCanvas,
+          alpha: true,
+          antialias: dpr === 1
+        });
+        aboutRenderer.setPixelRatio(Math.min(dpr, 1.2));
 
-      const aboutLeft = document.querySelector(".about-left");
-      let aboutRect = aboutLeft ? { width: aboutLeft.offsetWidth, height: aboutLeft.offsetHeight } : { width: 0, height: 0 };
-      
-      function resizeAbout() {
-        if (!aboutLeft) return;
-        // Batch read
-        const w = aboutLeft.offsetWidth;
-        const h = aboutLeft.offsetHeight;
-        aboutRenderer.setSize(w, h);
-        aboutCamera.aspect = w / h;
-        aboutCamera.updateProjectionMatrix();
-        aboutRect = { width: w, height: h };
-      }
-      window.addEventListener("resize", resizeAbout);
-      state.listeners.push(() => window.removeEventListener("resize", resizeAbout));
-      
-      // Initial sizing
-      if (aboutLeft) {
-        aboutRenderer.setSize(aboutRect.width, aboutRect.height);
-        aboutCamera.aspect = aboutRect.width / aboutRect.height;
-        aboutCamera.updateProjectionMatrix();
-      }
-
-      let geoSphere = new THREE.SphereGeometry(2, 32, 32);
-      let geoTorus = new THREE.TorusKnotGeometry(1.5, 0.4, 100, 16);
-      const matWire = new THREE.MeshBasicMaterial({ color: 0xc8ff00, wireframe: true, transparent: true, opacity: 0 });
-
-      const meshSphere = new THREE.Mesh(geoSphere, matWire.clone());
-      const meshTorus = new THREE.Mesh(geoTorus, matWire.clone());
-      meshSphere.material.opacity = 1;
-      meshTorus.material.opacity = 0;
-
-      aboutScene.add(meshSphere);
-      aboutScene.add(meshTorus);
-      aboutCamera.position.z = 5;
-
-      ScrollTrigger.create({
-        trigger: "#about",
-        start: "top 60%",
-        end: "bottom 40%",
-        scrub: true,
-        onUpdate: (self) => {
-          meshSphere.material.opacity = 1 - self.progress;
-          meshTorus.material.opacity = self.progress;
-          meshSphere.scale.setScalar(1 + self.progress * 0.5);
-          meshTorus.scale.setScalar(0.5 + self.progress * 0.5);
+        const aboutLeft = document.querySelector(".about-left");
+        let aboutRect = aboutLeft ? { width: aboutLeft.offsetWidth, height: aboutLeft.offsetHeight } : { width: 0, height: 0 };
+        
+        function resizeAbout() {
+          if (!aboutLeft) return;
+          // Batch read
+          const w = aboutLeft.offsetWidth;
+          const h = aboutLeft.offsetHeight;
+          aboutRenderer.setSize(w, h);
+          aboutCamera.aspect = w / h;
+          aboutCamera.updateProjectionMatrix();
+          aboutRect = { width: w, height: h };
         }
-      });
-
-      ScrollTrigger.create({
-        trigger: "#about",
-        start: "top 50%",
-        onEnter: () => {
-          gsap.set(".about-bracket", { opacity: 1 }); // Use set for simple entry
-          gsap.to(".about-line", { y: "0%", duration: 1, stagger: 0.1, ease: "expo.out", delay: 0.2 });
+        window.addEventListener("resize", resizeAbout);
+        state.listeners.push(() => window.removeEventListener("resize", resizeAbout));
+        
+        // Initial sizing
+        if (aboutLeft) {
+          aboutRenderer.setSize(aboutRect.width, aboutRect.height);
+          aboutCamera.aspect = aboutRect.width / aboutRect.height;
+          aboutCamera.updateProjectionMatrix();
         }
-      });
 
-      let isAboutVisible = false;
-      observeCanvas(aboutCanvas, (v) => isAboutVisible = v);
+        let geoSphere = new THREE.SphereGeometry(2, 32, 32);
+        let geoTorus = new THREE.TorusKnotGeometry(1.5, 0.4, 100, 16);
+        const matWire = new THREE.MeshBasicMaterial({ color: 0xc8ff00, wireframe: true, transparent: true, opacity: 0 });
 
-      function animateAbout() {
-        state.rafs.about = requestAnimationFrame(animateAbout);
-        if (!isAboutVisible) return;
-        meshSphere.rotation.x += 0.005;
-        meshSphere.rotation.y += 0.005;
-        meshTorus.rotation.x += 0.005;
-        meshTorus.rotation.y += 0.008;
-        aboutRenderer.render(aboutScene, aboutCamera);
+        const meshSphere = new THREE.Mesh(geoSphere, matWire.clone());
+        const meshTorus = new THREE.Mesh(geoTorus, matWire.clone());
+        meshSphere.material.opacity = 1;
+        meshTorus.material.opacity = 0;
+
+        aboutScene.add(meshSphere);
+        aboutScene.add(meshTorus);
+        aboutCamera.position.z = 5;
+
+        ScrollTrigger.create({
+          trigger: "#about",
+          start: "top 60%",
+          end: "bottom 40%",
+          scrub: true,
+          onUpdate: (self) => {
+            meshSphere.material.opacity = 1 - self.progress;
+            meshTorus.material.opacity = self.progress;
+            meshSphere.scale.setScalar(1 + self.progress * 0.5);
+            meshTorus.scale.setScalar(0.5 + self.progress * 0.5);
+          }
+        });
+
+        ScrollTrigger.create({
+          trigger: "#about",
+          start: "top 50%",
+          onEnter: () => {
+            gsap.set(".about-bracket", { opacity: 1 }); // Use set for simple entry
+            gsap.to(".about-line", { y: "0%", duration: 1, stagger: 0.1, ease: "expo.out", delay: 0.2 });
+          }
+        });
+
+        let isAboutVisible = false;
+        observeCanvas(aboutCanvas, (v) => isAboutVisible = v);
+
+        function animateAbout() {
+          state.rafs.about = requestAnimationFrame(animateAbout);
+          if (!isAboutVisible) return;
+          meshSphere.rotation.x += 0.005;
+          meshSphere.rotation.y += 0.005;
+          meshTorus.rotation.x += 0.005;
+          meshTorus.rotation.y += 0.008;
+          aboutRenderer.render(aboutScene, aboutCamera);
+        }
+        animateAbout();
       }
-      animateAbout();
-    }
+    });
 
     // --- TESTIMONIALS ---
-    const testimonialsCanvas = document.getElementById("testimonials-canvas");
-    if (testimonialsCanvas) {
-      const tScene = new THREE.Scene();
-      const tCamera = new THREE.PerspectiveCamera(75, winW / 500, 0.1, 1000);
-      const tRenderer = new THREE.WebGLRenderer({
-        canvas: testimonialsCanvas,
-        alpha: true,
-        antialias: dpr === 1
-      });
-      tRenderer.setPixelRatio(Math.min(dpr, 1.2));
-      tRenderer.setSize(winW, 500);
-      tCamera.position.z = 10;
+    threePromise.then(THREE => {
+      const testimonialsCanvas = document.getElementById("testimonials-canvas");
+      if (testimonialsCanvas) {
+        const tScene = new THREE.Scene();
+        const tCamera = new THREE.PerspectiveCamera(75, winW / 500, 0.1, 1000);
+        const tRenderer = new THREE.WebGLRenderer({
+          canvas: testimonialsCanvas,
+          alpha: true,
+          antialias: dpr === 1
+        });
+        tRenderer.setPixelRatio(Math.min(dpr, 1.2));
+        tRenderer.setSize(winW, 500);
+        tCamera.position.z = 10;
 
-      const geo = new THREE.SphereGeometry(12, 40, 40);
-      const mat = new THREE.PointsMaterial({ color: 0x00e5ff, size: 0.08, transparent: true, opacity: 0.4 });
-      const points = new THREE.Points(geo, mat);
-      tScene.add(points);
+        const geo = new THREE.SphereGeometry(12, 40, 40);
+        const mat = new THREE.PointsMaterial({ color: 0x00e5ff, size: 0.08, transparent: true, opacity: 0.4 });
+        const points = new THREE.Points(geo, mat);
+        tScene.add(points);
 
-      let isTestimonialsVisible = false;
-      observeCanvas(testimonialsCanvas, (v) => isTestimonialsVisible = v);
+        let isTestimonialsVisible = false;
+        observeCanvas(testimonialsCanvas, (v) => isTestimonialsVisible = v);
 
-      function animateTestimonials() {
-        state.rafs.testimonials = requestAnimationFrame(animateTestimonials);
-        if (!isTestimonialsVisible) return;
-        points.rotation.y += 0.0015;
-        points.rotation.x += 0.0008;
-        tRenderer.render(tScene, tCamera);
+        function animateTestimonials() {
+          state.rafs.testimonials = requestAnimationFrame(animateTestimonials);
+          if (!isTestimonialsVisible) return;
+          points.rotation.y += 0.0015;
+          points.rotation.x += 0.0008;
+          tRenderer.render(tScene, tCamera);
+        }
+        animateTestimonials();
+
+        const tResize = () => {
+          const tRect = document.getElementById("testimonials").getBoundingClientRect();
+          tCamera.aspect = winW / tRect.height;
+          tCamera.updateProjectionMatrix();
+          tRenderer.setSize(winW, tRect.height);
+        };
+        window.addEventListener("resize", tResize);
+        state.listeners.push(() => window.removeEventListener("resize", tResize));
       }
-      animateTestimonials();
-
-      const tResize = () => {
-        const tRect = document.getElementById("testimonials").getBoundingClientRect();
-        tCamera.aspect = winW / tRect.height;
-        tCamera.updateProjectionMatrix();
-        tRenderer.setSize(winW, tRect.height);
-      };
-      window.addEventListener("resize", tResize);
-      state.listeners.push(() => window.removeEventListener("resize", tResize));
-    }
+    });
 
     const testGrid = document.querySelector(".testimonials-grid");
     if (testGrid && isMobile) {
@@ -636,45 +641,47 @@ export async function initHome() {
     });
 
     // --- WHY US ---
-    const whyUsCanvas = document.getElementById("why-us-canvas");
-    if (whyUsCanvas) {
-      const whyUsScene = new THREE.Scene();
-      const whyUsCamera = new THREE.PerspectiveCamera(75, winW / winH, 0.1, 1000);
-      const whyUsRenderer = new THREE.WebGLRenderer({
-        canvas: whyUsCanvas,
-        alpha: true,
-        antialias: dpr === 1
-      });
-      whyUsRenderer.setPixelRatio(Math.min(dpr, 1.2));
+    threePromise.then(THREE => {
+      const whyUsCanvas = document.getElementById("why-us-canvas");
+      if (whyUsCanvas) {
+        const whyUsScene = new THREE.Scene();
+        const whyUsCamera = new THREE.PerspectiveCamera(75, winW / winH, 0.1, 1000);
+        const whyUsRenderer = new THREE.WebGLRenderer({
+          canvas: whyUsCanvas,
+          alpha: true,
+          antialias: dpr === 1
+        });
+        whyUsRenderer.setPixelRatio(Math.min(dpr, 1.2));
 
-      whyUsRenderer.setSize(winW, winH);
-      whyUsCamera.position.z = 8;
-
-      const tornadoGeo = new THREE.TorusKnotGeometry(10, 3, 64, 8);
-      const tornadoMat = new THREE.MeshBasicMaterial({ color: 0xff3cac, wireframe: true, transparent: true, opacity: 0.05 });
-      const tornado = new THREE.Mesh(tornadoGeo, tornadoMat);
-      whyUsScene.add(tornado);
-
-      let isWhyUsVisible = false;
-      observeCanvas(whyUsCanvas, (v) => isWhyUsVisible = v);
-
-      function animateWhyUs() {
-        state.rafs.whyUs = requestAnimationFrame(animateWhyUs);
-        if (!isWhyUsVisible) return;
-        tornado.rotation.y += 0.002;
-        tornado.rotation.x += 0.001;
-        whyUsRenderer.render(whyUsScene, whyUsCamera);
-      }
-      animateWhyUs();
-
-      const wResize = () => {
-        whyUsCamera.aspect = winW / winH;
-        whyUsCamera.updateProjectionMatrix();
         whyUsRenderer.setSize(winW, winH);
-      };
-      window.addEventListener("resize", wResize);
-      state.listeners.push(() => window.removeEventListener("resize", wResize));
-    }
+        whyUsCamera.position.z = 8;
+
+        const tornadoGeo = new THREE.TorusKnotGeometry(10, 3, 64, 8);
+        const tornadoMat = new THREE.MeshBasicMaterial({ color: 0xff3cac, wireframe: true, transparent: true, opacity: 0.05 });
+        const tornado = new THREE.Mesh(tornadoGeo, tornadoMat);
+        whyUsScene.add(tornado);
+
+        let isWhyUsVisible = false;
+        observeCanvas(whyUsCanvas, (v) => isWhyUsVisible = v);
+
+        function animateWhyUs() {
+          state.rafs.whyUs = requestAnimationFrame(animateWhyUs);
+          if (!isWhyUsVisible) return;
+          tornado.rotation.y += 0.002;
+          tornado.rotation.x += 0.001;
+          whyUsRenderer.render(whyUsScene, whyUsCamera);
+        }
+        animateWhyUs();
+
+        const wResize = () => {
+          whyUsCamera.aspect = winW / winH;
+          whyUsCamera.updateProjectionMatrix();
+          whyUsRenderer.setSize(winW, winH);
+        };
+        window.addEventListener("resize", wResize);
+        state.listeners.push(() => window.removeEventListener("resize", wResize));
+      }
+    });
 
     ScrollTrigger.create({
       trigger: "#why-us",
@@ -688,37 +695,39 @@ export async function initHome() {
     });
 
     // --- SERVICES THREE.JS ---
-    const servicesCanvas = document.getElementById("services-canvas");
-    if (servicesCanvas) {
-      const sScene = new THREE.Scene();
-      const sCamera = new THREE.PerspectiveCamera(75, winW / 400, 0.1, 1000);
-      const sRenderer = new THREE.WebGLRenderer({ canvas: servicesCanvas, alpha: true, antialias: true });
-      sRenderer.setSize(winW, 400); sCamera.position.z = 5;
+    threePromise.then(THREE => {
+      const servicesCanvas = document.getElementById("services-canvas");
+      if (servicesCanvas) {
+        const sScene = new THREE.Scene();
+        const sCamera = new THREE.PerspectiveCamera(75, winW / 400, 0.1, 1000);
+        const sRenderer = new THREE.WebGLRenderer({ canvas: servicesCanvas, alpha: true, antialias: true });
+        sRenderer.setSize(winW, 400); sCamera.position.z = 5;
 
-      const geo = new THREE.TorusKnotGeometry(10, 3, 100, 16);
-      const mat = new THREE.MeshBasicMaterial({ color: 0x00e5ff, wireframe: true, transparent: true, opacity: 0.1 });
-      const knot = new THREE.Mesh(geo, mat);
-      knot.scale.set(0.15, 0.15, 0.15);
-      sScene.add(knot);
+        const geo = new THREE.TorusKnotGeometry(10, 3, 100, 16);
+        const mat = new THREE.MeshBasicMaterial({ color: 0x00e5ff, wireframe: true, transparent: true, opacity: 0.1 });
+        const knot = new THREE.Mesh(geo, mat);
+        knot.scale.set(0.15, 0.15, 0.15);
+        sScene.add(knot);
 
-      let isServicesVisible = false;
-      observeCanvas(servicesCanvas, (v) => isServicesVisible = v);
+        let isServicesVisible = false;
+        observeCanvas(servicesCanvas, (v) => isServicesVisible = v);
 
-      function animateServices() {
-        state.rafs.services = requestAnimationFrame(animateServices);
-        if (!isServicesVisible) return;
-        knot.rotation.x += 0.01; knot.rotation.y += 0.01;
-        sRenderer.render(sScene, sCamera);
+        function animateServices() {
+          state.rafs.services = requestAnimationFrame(animateServices);
+          if (!isServicesVisible) return;
+          knot.rotation.x += 0.01; knot.rotation.y += 0.01;
+          sRenderer.render(sScene, sCamera);
+        }
+        animateServices();
+
+        const sResize = () => {
+          sCamera.aspect = winW / 400; sCamera.updateProjectionMatrix();
+          sRenderer.setSize(winW, 400);
+        };
+        window.addEventListener("resize", sResize);
+        state.listeners.push(() => window.removeEventListener("resize", sResize));
       }
-      animateServices();
-
-      const sResize = () => {
-        sCamera.aspect = winW / 400; sCamera.updateProjectionMatrix();
-        sRenderer.setSize(winW, 400);
-      };
-      window.addEventListener("resize", sResize);
-      state.listeners.push(() => window.removeEventListener("resize", sResize));
-    }
+    });
 
     // --- COMPARISON SECTION ANIMATION ---
     const compRows = gsap.utils.toArray('.comp-row');

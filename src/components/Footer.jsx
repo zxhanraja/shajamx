@@ -136,7 +136,10 @@ export default function Footer() {
 
       {/* FOOTER BOTTOM */}
       <div className="footer-bottom">
-        <div className="copyright">&copy; 2026 ShajamX Agency. All rights reserved.</div>
+        <div className="copyright">
+          &copy; 2026 ShajamX Agency. All rights reserved. 
+          <a href="/privacy-policy" onClick={(e) => handleLinkClick(e, '/privacy-policy')} className="footer-bottom-link" style={{ marginLeft: '15px', textDecoration: 'none', color: 'var(--muted)', transition: 'color 0.3s ease' }}>Privacy Policy</a>
+        </div>
         <div className="built-with">Built with Love + GSAP + Three.js + React Router</div>
       </div>
 

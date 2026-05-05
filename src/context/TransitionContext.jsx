@@ -29,8 +29,8 @@ export function TransitionProvider({ children }) {
 
     const isMobile = window.innerWidth <= 768;
     const panelCount = isMobile ? 3 : 4;
-    const stagger = isMobile ? 0.06 : 0.08;
-    const duration = isMobile ? 0.45 : 0.55;
+    const stagger = isMobile ? 0.04 : 0.05; // Reduced from 0.08
+    const duration = isMobile ? 0.35 : 0.4; // Reduced from 0.55
 
     const panels = Array.from(overlayRef.current.children).slice(0, 4); // max 4
     const activePanels = panels.slice(0, panelCount);
@@ -62,7 +62,7 @@ export function TransitionProvider({ children }) {
       
       navigate(href);
       
-      // Give React 50ms to instantly mount the new virtual DOM components
+      // Give React 20ms (instead of 50ms) to instantly mount the new virtual DOM components
       setTimeout(() => {
          // Slide out to right
          activePanels.forEach((p, i) => {

@@ -2,15 +2,16 @@ import React, { useEffect, Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { TransitionProvider } from './context/TransitionContext.jsx';
 import Header from './components/Header.jsx';
+// Standard imports for main pages to ensure instant navigation
+import Home from './pages/Home.jsx';
+import About from './pages/About.jsx';
+import Services from './pages/Services.jsx';
+import Work from './pages/Work.jsx';
+import WhyUs from './pages/WhyUs.jsx';
+import PrivacyPolicy from './pages/PrivacyPolicy.jsx';
+
 const Footer = lazy(() => import('./components/Footer.jsx'));
 const ContactModal = lazy(() => import('./components/ContactModal.jsx'));
-
-// Lazy load page components for better performance (splitting heavy Three.js/GSAP per page)
-const Home = lazy(() => import('./pages/Home.jsx'));
-const About = lazy(() => import('./pages/About.jsx'));
-const Services = lazy(() => import('./pages/Services.jsx'));
-const Work = lazy(() => import('./pages/Work.jsx'));
-const WhyUs = lazy(() => import('./pages/WhyUs.jsx'));
 
 // Minimal fallback loader
 const PageLoader = () => (
@@ -23,7 +24,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { TextPlugin } from 'gsap/TextPlugin';
 import { Draggable } from 'gsap/Draggable';
-import Lenis from 'lenis';
+import Lenis from '@studio-freight/lenis';
 import { initPreloader } from './utils/homeAnimations.js';
 
 gsap.registerPlugin(ScrollTrigger, TextPlugin, Draggable);
@@ -53,12 +54,10 @@ function GlobalSetup() {
     // Initialize Global Lenis Smooth Scroll with RESPONSIVE settings
     if (!window.lenis) {
       const lenis = new Lenis({
-        lerp: 0.06, // Lower for buttery smooth feel
+        lerp: 0.1, // Increased from 0.04 for more responsiveness (snappier feel)
         smoothWheel: true,
-        smoothTouch: true, // Smooth scroll on touch devices
-        syncTouch: true, // Syncs touch scroll with Lenis interpolation
         wheelMultiplier: 1.0, 
-        touchMultiplier: 1.8,
+        touchMultiplier: 1.5,
       });
       window.lenis = lenis;
 
@@ -155,6 +154,7 @@ export default function App() {
               <Route path="/services" element={<Services />} />
               <Route path="/work" element={<Work />} />
               <Route path="/why-us" element={<WhyUs />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             </Routes>
           </Suspense>
         </main>

@@ -18,8 +18,7 @@ function Services() {
     "serviceType": "Web Development & Design",
     "provider": { "@type": "Organization", "name": "ShajamX" },
     "areaServed": [
-      { "@type": "City", "name": "Kolkata" },
-      { "@type": "City", "name": "Mumbai" }
+      { "@type": "Country", "name": "Universal" }
     ],
     "hasOfferCatalog": {
       "@type": "OfferCatalog",
@@ -71,8 +70,8 @@ function Services() {
   return (
     <div ref={containerRef} style={{ width: '100vw', overflow: 'hidden' }}>
       <SEO
-        title="Premium Web Development Services in Kolkata & Mumbai"
-        description="ShajamX offers high-end web development, 3D design, and motion design services for businesses in Kolkata and Mumbai. Custom React & Three.js solutions."
+        title="Premium 3D Web Development Services"
+        description="ShajamX offers high-end web development, 3D design, and motion design services for brands that demand excellence. Custom React & Three.js solutions."
         path="/services"
         structuredData={servicesSchema}
       />
@@ -91,7 +90,7 @@ function Services() {
             <h1 className="hero-headline react-hero-title" style={{ fontSize: 'clamp(2rem, 10vw, 8rem)', letterSpacing: '-0.02em', mixBlendMode: 'difference', margin: 0 }}>SERVICES</h1>
           </div>
           <p className="react-hero-subtext" style={{ fontSize: 'clamp(0.95rem, 3vw, 1.2rem)', marginTop: '1rem', color: '#f0f0f0', maxWidth: '800px', margin: '1rem auto 0' }}>
-            Premier digital engineering for Kolkata & Mumbai. From brand identity to complex 3D WebGL interactions and high-performance engineering.
+            Premier digital engineering for a borderless world. From brand identity to complex 3D WebGL interactions and high-performance engineering.
           </p>
         </div>
       </section>
@@ -452,7 +451,7 @@ function Services() {
           <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
             <h2 className="section-title" style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', letterSpacing: '-0.02em', margin: 0 }}>SERVICE TIERS</h2>
             <p style={{ color: '#a0a0b0', fontSize: '1.1rem', marginTop: '1rem', fontFamily: 'Space Mono, monospace' }}>
-              Custom pricing · 50–50 payment · Optimized for Indian Markets
+              Custom pricing · 50–50 payment · Optimized for High-End Markets
             </p>
           </div>
 
@@ -504,7 +503,7 @@ function Services() {
               <ul className="tier-list">
                 <li>20 Custom Pages — double the content, double the ranking power</li>
                 <li>Blog Setup + 5 Articles — AI-written, SEO-optimised</li>
-                <li>Advanced Local SEO — city-targeted pages, Google My Business</li>
+                <li>Advanced Domain SEO — region-agnostic pages, universal visibility</li>
                 <li>Logo Design Included — professional brand identity</li>
               </ul>
               <div className="tier-section-label">Marketing &amp; Integrations</div>
@@ -537,7 +536,7 @@ function Services() {
                 <li>30 Custom Pages — comprehensive coverage of every service</li>
                 <li>15 Blog Articles — authority content that ranks for months</li>
                 <li>Product/Service Gallery — up to 50 items with descriptions</li>
-                <li>Multi-City SEO Pages — rank across multiple cities</li>
+                <li>Multi-Territory SEO Pages — rank across diverse environments</li>
               </ul>
               <div className="tier-section-label">Advanced SEO &amp; Marketing</div>
               <ul className="tier-list">
@@ -569,7 +568,7 @@ function Services() {
               <ul className="tier-list">
                 <li>Up to 50 Custom Pages — complete digital presence</li>
                 <li>25 Blog Articles — 6+ months of content on day one</li>
-                <li>City × Industry Landing Pages — local SEO across India</li>
+                <li>Universal Landing Pages — high-performance SEO across every touchpoint</li>
                 <li>Multilingual — Hindi + English</li>
               </ul>
               <div className="tier-section-label">Advanced Features</div>
@@ -615,10 +614,10 @@ function Services() {
                     ['Blog Articles',            '—',     '5',     '15',        '25'],
                     ['Logo Design',              '—',     '✓',     '✓',         '✓'],
                     ['Local SEO + GMB',          '—',     '✓',     '✓',         '✓'],
-                    ['Multi-City SEO Pages',     '—',     '—',     '✓',         '✓'],
+                    ['Multi-Territory SEO Pages', '—',     '—',     '✓',         '✓'],
                     ['Competitor Research',      '—',     '—',     '✓',         '✓'],
                     ['Product/Service Gallery',  '—',     '—',     '✓',         '✓'],
-                    ['City × Industry Pages',    '—',     '—',     '—',         '✓'],
+                    ['Universal Landing Pages',   '—',     '—',     '—',         '✓'],
                     ['Hindi + English',          '—',     '—',     '—',         '✓'],
                     ['Custom Animations',        '—',     '—',     '—',         '✓'],
                     ['WhatsApp Business Setup',  '—',     '—',     '—',         '✓'],

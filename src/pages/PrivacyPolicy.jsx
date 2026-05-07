@@ -248,7 +248,7 @@ export default function PrivacyPolicy() {
           opacity: 0.5;
         }
         @media (max-width: 768px) {
-          .main-headline { font-size: 60px; }
+          .main-headline { font-size: clamp(32px, 14vw, 54px); }
           .policy-grid { grid-template-columns: 1fr; }
           .policy-card { padding: 30px; }
         }

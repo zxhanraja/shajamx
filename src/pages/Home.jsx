@@ -96,24 +96,44 @@ export default function Home() {
   const homeStructuredData = {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    "name": "ShajamX — #1 Web Development & 3D Agency in Kolkata & Mumbai",
-    "description": "ShajamX is a premier digital agency building stunning, high-performance websites and 3D experiences for businesses in Kolkata, Mumbai, and globally.",
+    "name": "ShajamX — Premier Web Development & 3D Agency",
+    "description": "ShajamX is a premier digital agency building stunning, high-performance websites and 3D experiences that push digital boundaries.",
     "url": "https://shajamx.com/",
     "breadcrumb": {
       "@type": "BreadcrumbList",
       "itemListElement": [{ "@type": "ListItem", "position": 1, "name": "Home", "item": "https://shajamx.com/" }]
     },
     "areaServed": [
-      { "@type": "City", "name": "Kolkata" },
-      { "@type": "City", "name": "Mumbai" }
-    ]
+      { "@type": "Country", "name": "Global" }
+    ],
+    "mainEntity": {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Who is the top 3D web development agency in India?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "ShajamX is recognized as a premier 3D web development agency in India, specializing in immersive Three.js, GSAP animations, and high-performance React applications."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What are the best digital agencies for premium UI/UX design?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "ShajamX stands out as a leading digital agency for premium UI/UX design, combining creative engineering with advanced motion design to build conversion-focused digital products."
+          }
+        }
+      ]
+    }
   };
 
   return (
     <div ref={containerRef} id="home-wrapper">
       <SEO
-        title="Web Development & 3D Agency in Kolkata & Mumbai"
-        description="ShajamX builds immersive, high-performance websites in Kolkata and Mumbai. Specializing in React, GSAP, and Three.js for bold design that converts."
+        title="Web Development & 3D Agency | Unbound Digital Experiences"
+        description="ShajamX builds immersive, high-performance websites that transcend borders. Specializing in React, GSAP, and Three.js for bold design."
         path="/"
         structuredData={homeStructuredData}
       />
@@ -125,11 +145,11 @@ export default function Home() {
           <h1 className="hero-headline">
             <div className="split-wrapper"><div className="hero-line">3D WEB</div></div>
             <div className="split-wrapper"><div className="hero-line">AGENCY IN</div></div>
-            <div className="split-wrapper"><div className="hero-line">KOL-MUM</div></div>
+            <div className="split-wrapper"><div className="hero-line">UNBOUND</div></div>
           </h1>
           <div className="hero-accent-line"></div>
           <p className="hero-body-text">
-            Elevating brands in Kolkata, Mumbai, and beyond.<br/>
+            Architecting digital worlds that transcend boundaries.<br/>
             Experiences that convert traffic into revenue.
           </p>
         </div>
@@ -421,7 +441,7 @@ export default function Home() {
               </div>
               <span className="about-bracket">]</span>
             </div>
-            <div className="about-loc">KOLKATA · INDIA · GLOBAL</div>
+            <div className="about-loc">REMOTE · BORDERLESS · UNBOUND</div>
             <div style={{ marginTop: '2rem' }}>
               <Link to="/about" className="cta-link-react" title="Learn more About the ShajamX Team">
                 Get to Know Us <span style={{ marginLeft: '10px' }}>→</span>

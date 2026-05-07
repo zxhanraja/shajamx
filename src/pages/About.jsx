@@ -78,8 +78,8 @@ function About() {
   return (
     <div ref={containerRef} style={{ width: '100vw', overflow: 'hidden' }}>
       <SEO
-        title="About our 3D Web Agency in Kolkata & Mumbai"
-        description="Meet the ShajamX team. We are a premier 3D web development agency serving clients in Kolkata, Mumbai, and globally with bold digital experiences."
+        title="About our Unbound 3D Web Agency"
+        description="Meet the ShajamX team. We are a premier 3D web development agency serving high-end brands with bold digital experiences."
         path="/about"
       />
       
@@ -99,7 +99,7 @@ function About() {
             <h1 className="hero-headline react-hero-title" style={{ fontSize: 'clamp(2.5rem, 10vw, 8rem)', letterSpacing: '-0.02em', mixBlendMode: 'difference', margin: 0 }}>WHO WE ARE</h1>
           </div>
           <p className="react-hero-subtext" style={{ fontSize: 'clamp(0.95rem, 3vw, 1.2rem)', marginTop: '1rem', color: '#f0f0f0', maxWidth: '600px', margin: '1rem auto 0' }}>
-            We are ShajamX — A team of designers and developers obsessed with building things that move.
+            We are ShajamX — A world-class team of designers and developers recognized for engineering the future of 3D web experiences.
           </p>
         </div>
       </section>
@@ -107,9 +107,9 @@ function About() {
       {/* Mission */}
       <section className="mission-section" style={{ padding: '10vmax 5%', background: '#0d0d14' }}>
         <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
-          <h2 className="section-title mission-title" style={{ marginBottom: '2rem' }}>OUR MISSION IN INDIA</h2>
+          <h2 className="section-title mission-title" style={{ marginBottom: '2rem' }}>OUR CORE MISSION</h2>
           <p className="mission-text" style={{ fontSize: 'clamp(1.2rem, 3vw, 2.5rem)', lineHeight: 1.4, color: '#f0f0f0' }}>
-            To lead the next wave of the Indian web through <span style={{ color: '#c8ff00' }}>innovative engineering</span> in Kolkata and <span style={{ color: '#ff3cac' }}>bold aesthetics</span> in Mumbai. We build internet experiences, not just destinations.
+            To lead the next wave of the web through <span style={{ color: '#c8ff00' }}>innovative engineering</span> and <span style={{ color: '#ff3cac' }}>bold aesthetics</span> that transcend boundaries.
           </p>
         </div>
       </section>
@@ -183,18 +183,18 @@ function About() {
             { 
               name: 'SHAISTA HANIF', 
               role: 'Creative Director & Lead Dev', 
-              location: 'Kolkata',
+              location: 'Remote',
               image: 'https://ik.imagekit.io/ioktbcewp/ChatGPT%20Image%20Mar%2027,%202026,%2005_26_34%20PM.png',
               bio: 'The visionary behind ShajamX. Blending high-performance engineering with avant-garde aesthetics to craft unforgettable digital experiences.',
-              bio2: 'Shaista drives the core creative direction from Kolkata, ensuring that every project pushes the boundaries of modern web design.'
+              bio2: 'Shaista drives the core creative direction, ensuring that every project pushes the boundaries of modern web design.'
             },
             { 
               name: 'ZUBBER AKHTAR', 
               role: 'Senior UI/UX Designer', 
-              location: 'Mumbai',
+              location: 'Remote',
               image: 'https://ik.imagekit.io/ioktbcewp/ChatGPT%20Image%20Mar%2027,%202026,%2005_15_41%20PM.png?updatedAt=1774612198693',
               bio: 'Master of user journeys. Zubber transforms complex flows into intuitive, seamless, and visually stunning interfaces with pixel-perfect precision.',
-              bio2: 'Based in Mumbai, his approach combines deep user empathy with striking visual design, resulting in products that users love to interact with.'
+              bio2: 'Operating remotely, his approach combines deep user empathy with striking visual design, resulting in products that users love to interact with.'
             },
             { 
               name: 'ZEESHAN RAZA', 
@@ -202,7 +202,7 @@ function About() {
               location: 'India',
               image: 'https://ik.imagekit.io/ioktbcewp/ChatGPT%20Image%20Dec%2015,%202025,%2009_35_49%20AM.png?updatedAt=1765772371409',
               bio: 'Architect of immersive 3D content. Zeeshan leverages WebGL and Three.js to deliver buttery-smooth, interactive graphical worlds straight to your browser.',
-              bio2: 'From creative coding to rendering optimizations, he breathes life into pages across Kolkata & Mumbai, turning them into interactive experiences.'
+              bio2: 'From creative coding to rendering optimizations, he breathes life into pages, turning them into interactive experiences that transcend borders.'
             }
           ].map((member, i) => (
             <div key={i} className="team-row-react">
